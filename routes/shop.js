@@ -53,4 +53,6 @@ router.post(
 
 router.get('/orders/:orderId', isAuth, shopController.getInvoice);
 
+router.post('/ordermark/:orderId', isAuth, shopController.postOrderMark);
+
 module.exports = router;

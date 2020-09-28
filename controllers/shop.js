@@ -231,7 +231,23 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-	Order.find({ 'user.userId': req.user._id })
+	if(req.user.email === 'ritik@ritik.com') {
+	Order.find().sort({'isDone': -1})
+	.then(orders => {
+		res.render('shop/orders', {
+				path: '/orders',
+				pageTitle: 'Your Orders',
+				orders: orders
+			});
+	})
+	.catch(err => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
+	}
+	else {
+	Order.find({ 'user.userId': req.user._id }).sort({'isDone': -1})
 		.then(orders => {
 			res.render('shop/orders', {
 				path: '/orders',
@@ -244,7 +260,21 @@ exports.getOrders = (req, res, next) => {
 			error.httpStatusCode = 500;
 			return next(error);
 		});
-};
+	}
+}; 
+
+exports.postOrderMark = (req, res, next) => {
+	const orderId = req.params.orderId;
+	Order.findById(orderId)
+	.then(order => {
+		if(order.isDone === true) {
+			order.isDone = false;
+		}
+		else {
+			order.isDone = true;
+		}
+	})
+}
 
 exports.getInvoice = (req, res, next) => {
 	const orderId = req.params.orderId;
@@ -253,7 +283,7 @@ exports.getInvoice = (req, res, next) => {
 			if (!order) {
 				return next(new Error('No order found.'));
 			}
-			if (order.user.userId.toString() !== req.user._id.toString()) {
+			if (req.user.email !== 'ritik@ritik.com' && order.user.userId.toString() !== req.user._id.toString()) {
 				return next(new Error('Unauthorized'));
 			}
 			const invoiceName = 'invoice-' + orderId + '.pdf';
@@ -273,6 +303,7 @@ exports.getInvoice = (req, res, next) => {
 			});
 			pdfDoc.text('-----------------------');
 			let totalPrice = 0;
+			let address = order.address;
 			order.products.forEach(prod => {
 				totalPrice += prod.quantity * prod.product.price;
 				pdfDoc
@@ -288,6 +319,10 @@ exports.getInvoice = (req, res, next) => {
 			});
 			pdfDoc.text('---');
 			pdfDoc.fontSize(20).text('Total Price: $' + totalPrice);
+			pdfDoc.text('---');
+			pdfDoc.text('Phone Number: ' + address.number);
+			pdfDoc.text('---');
+			pdfDoc.text('Address: ' + address.name + ', ' + address.location + ', ' + ', '+ address.city + ', '+ address.pincode);
 
 			pdfDoc.end();
 		})

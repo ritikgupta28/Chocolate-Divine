@@ -20,6 +20,10 @@ const orderSchema = new Schema({
       ref: 'User'
     }
   },
+  isDone: {
+    type: Boolean,
+    default: false
+  },
   address: {
     name: {
       type: String,
