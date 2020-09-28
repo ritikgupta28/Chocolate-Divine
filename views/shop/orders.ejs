@@ -34,7 +34,9 @@
                                     <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
                                 <% }); %>
                             </ul>
-                            <button type="submit">Mark as Done</button>
+                            <% if(isAdminAuthenticated) { %>
+                            <a href="/ordermark/<%= order._id %>" class="btn">Mark Done</a>
+                            <% } %>
                         </li>
                     <% }); %>
                 </ul>

@@ -151,6 +151,52 @@ exports.getCheckout = (req, res, next) => {
 		});
 };
 
+exports.postOrderMark = (req, res, next) => {
+	const orderId = req.params.orderId;
+	Order.findById(orderId)
+	.then(order => {
+		order.isDone = true;
+		return order.save();
+	})
+	.catch(err => {
+		  const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+	});
+	setTimeout(() => {
+	if(req.user.email === 'ritik@ritik.com') {
+	Order.find().sort({'isDone': 1})
+	.then(orders => {
+		res.render('shop/orders', {
+				path: '/orders',
+				pageTitle: 'Your Orders',
+				orders: orders
+			});
+	})
+	.catch(err => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
+	}
+	else {
+	Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
+		.then(orders => {
+			res.render('shop/orders', {
+				path: '/orders',
+				pageTitle: 'Your Orders',
+				orders: orders
+			});
+		})
+		.catch(err => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
+	}
+}, 1000);
+}
+
 exports.postOrder = (req, res, next) => {
 	// const token = req.body.stripeToken;
 	const name = req.body.naam;
@@ -232,7 +278,7 @@ exports.postOrder = (req, res, next) => {
 
 exports.getOrders = (req, res, next) => {
 	if(req.user.email === 'ritik@ritik.com') {
-	Order.find().sort({'isDone': -1})
+	Order.find().sort({'isDone': 1})
 	.then(orders => {
 		res.render('shop/orders', {
 				path: '/orders',
@@ -247,7 +293,7 @@ exports.getOrders = (req, res, next) => {
 		});
 	}
 	else {
-	Order.find({ 'user.userId': req.user._id }).sort({'isDone': -1})
+	Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
 		.then(orders => {
 			res.render('shop/orders', {
 				path: '/orders',
@@ -262,19 +308,6 @@ exports.getOrders = (req, res, next) => {
 		});
 	}
 }; 
-
-exports.postOrderMark = (req, res, next) => {
-	const orderId = req.params.orderId;
-	Order.findById(orderId)
-	.then(order => {
-		if(order.isDone === true) {
-			order.isDone = false;
-		}
-		else {
-			order.isDone = true;
-		}
-	})
-}
 
 exports.getInvoice = (req, res, next) => {
 	const orderId = req.params.orderId;
