@@ -1,0 +1,133 @@
+<%- include('../includes/head.ejs') %>
+		<link rel="stylesheet" href="/css/forms.css">
+		<link rel="stylesheet" href="/css/auth.css">
+		<link rel="stylesheet" href="/css/stylelogin.css">
+		<meta name="google-signin-client_id" content="54111174425-rnj75h4bll3odlc8gc01djh9b7kmn7od.apps.googleusercontent.com">
+
+</head>
+
+<script src="https://apis.google.com/js/platform.js" async defer> </script>
+<script>
+gapi.load('auth2',()=>{
+	gapi.auth2.init();
+})
+function signup() {
+	document.querySelector('.sign').style.display = 'block';
+	document.querySelector('.login').style.display = 'none';
+}
+
+function onSignIn(googleUser) {
+	var profile = googleUser.getBasicProfile();
+	console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+	console.log('Name: ' + profile.getName());
+	console.log('Image URL: ' + profile.getImageUrl());
+	console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+	console.log(googleUser);
+}
+</script>
+
+<body>
+	 <%- include('../includes/navigation.ejs') %>
+
+		<main>
+				<% if (errorMessage) { %>
+						<div class="user-message user-message--error"><%= errorMessage %></div>
+				<% } %>
+				<div class="w3layouts-main">
+					<div class="bg-layer login">
+						<h1>
+
+
+
+						</h1>
+						<div class="header-main" style="z-index:0">
+							<div class="main-icon">
+								  <span ><img src="https://ik.imagekit.io/slashit/choco_divine/2222-removebg-preview_KfrjXNTs2-.png" alt="" style="width:100px;height:100px" class="center"></span>
+							</div>
+							<div class="header-left-bottom">
+								<form action="/signup" method="POST">
+									<div class="icon1">
+										<span class="fa fa-user"></span>
+										<input
+												class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+												type="email"
+												name="email"
+												placeholder="Enter Email"
+												id="email"
+												value="<%= oldInput.email %>">
+									</div>
+									<div class="icon1">
+										<span class="fa fa-lock"></span>
+										<input
+												class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+												type="password"
+												name="password"
+												placeholder="Enter Password"
+												id="password"
+												value="<%= oldInput.password %>">
+									</div>
+									<div class="icon1">
+										<span class="fa fa-lock"></span>
+										<input
+												class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+												type="password"
+												name="confirmPassword"
+												placeholder="Confirm Password"
+												id="confirmPassword"
+												value="<%= oldInput.confirmPassword %>">
+									</div>
+									<!-- <div class="login-check">
+										<label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i> Keep me logged in</label>
+									</div> -->
+									<div class="bottom">
+										<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+										<button class="btn" type="submit">Signup</button>
+									</div>
+									<div class="links">
+										<!-- <p><a href="/reset">Forgot Password?</a></p> -->
+											<!-- <div class="g-signin2" data-onsuccess="onSignIn"><button type="button" name="button">Sign In </button></div> -->
+										<p ><a href="/login" >Already User? Login</a></p>
+										<div class="clear"></div>
+									</div>
+								</form>
+							</div>
+							<div class="social">
+								<ul>
+
+								<div class="g-signin2" data-onsuccess="onSignIn" style="text-align:center;margin-left:30%"><button type="button" name="button">Sign In </button></div>
+								</ul>
+							</div>
+						</div>
+				<!-- <form class="login-form" action="/signup" method="POST" novalidate>
+						<div class="form-control">
+								<label for="email">E-Mail</label>
+								<input
+										class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+										type="email"
+										name="email"
+										id="email"
+										value="<%= oldInput.email %>">
+						</div>
+						<div class="form-control">
+								<label for="password">Password</label>
+								<input
+										class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+										type="password"
+										name="password"
+										id="password"
+										value="<%= oldInput.password %>">
+						</div>
+						<div class="form-control">
+								<label for="confirmPassword">Confirm Password</label>
+								<input
+										class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+										type="password"
+										name="confirmPassword"
+										id="confirmPassword"
+										value="<%= oldInput.confirmPassword %>">
+						</div>
+						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+						<button class="btn" type="submit">Signup</button>
+				</form> -->
+		</main>
+<%- include('../includes/end.ejs') %>

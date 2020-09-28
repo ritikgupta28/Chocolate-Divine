@@ -1,0 +1,186 @@
+<%- include('../includes/head.ejs') %>
+		<link rel="stylesheet" href="/css/cart.css">
+		</head>
+
+		<body>
+			<%- include('../includes/navigation.ejs') %>
+			<main>
+				<div class='container' style="z-index:0">
+					<div class='window' style="z-index:0">
+						<div class='order-info' style="overflow-y:scroll">
+							<div class='order-info-content'>
+								<h2>Order Summary</h2>
+								<div class='line'></div>
+								<% products.forEach(p => { %>
+									<table class='order-table'>
+										<tbody>
+											<tr>
+												<td>
+													<img src='<%= p.productId.imageUrl %>' class='full-width'></img>
+												</td>
+												<td>
+													<br>
+													<span class='thin'>
+														<%= p.productId.title %>
+													</span>
+													<br>
+													<%= p.productId.description %>
+													<br>
+													<span class='thin small'>
+														Quantity :  <%= p.quantity %>
+														<br>
+														<br>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<div class='price'>
+														Price: <%= p.productId.price %>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class='line'></div>
+								<% }) %>
+							</div>
+						</div>
+						<div class='credit-info'>
+							<div class='credit-info-content'>
+								<!-- <table class='half-input-table'>
+									<tr>
+										<td>
+											Please select your card:
+										</td>
+										<td>
+											<div class='dropdown' id='card-dropdown'>
+												<div class='dropdown-btn' id='current-card'>
+													Visa
+												</div>
+												<div class='dropdown-select'>
+													<ul>
+														<li>Master Card</li>
+														<li>American Express</li>
+													</ul>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</table> -->
+								<!-- <img src='https://dl.dropboxusercontent.com/s/ubamyu6mzov5c80/visa_logo%20%281%29.png' height='80' class='credit-card-image' id='credit-card-image'></img> -->
+								Name :
+								<input
+									class="input-field"
+									type="text"
+                  name="name"
+                  id="name" >
+								Address :
+								<input
+									class="input-field"
+									type="text"
+                  name="location"
+                  id="location" >
+								Phone No :
+								<input
+									class="input-field"
+									type="text"
+                  name="number"
+                  id="number" >
+								<table class='input-table'>
+									<tr>
+										<td>
+											City :
+											<input
+												class="input-field"
+												type="text"
+                  			name="city"
+                  			id="city" >
+										</td>
+										<td>
+											Pincode :
+											<input
+												class="input-field"
+												type="text"
+              			    name="pincode"
+                  			id="pincode" >
+										</td>
+									</tr>
+								</table>
+								<table>
+									<tr>
+										<td>
+											<div class="centered">
+												<form action="/create-order" method="POST">
+													<script
+													src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+													data-key="pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO"
+													data-amount="<%= totalSum * 100 %>"
+													data-name="Your Order"
+													data-description="All the items you ordewred"
+													data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+													data-locale="auto"
+													data-currency="INR"></script>
+												</form>
+											</div>
+										</td>
+										<td>
+											<div class="centered">
+												<form action="/create-order" method="POST">
+													<button class="btn" type="submit">Cash on Delivery</button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								</table>
+								<div class='total'>
+									<span style='float:left;'>
+										<div class='thin dense'>
+											Discount :
+										</div>
+										<div class='thin dense'>
+											Delivery Charges :
+										</div>
+										TOTAL :
+									</span>
+									<span style='float:right; text-align:right;'>
+										<div class='thin dense'>
+											0.0
+										</div>
+										<div class='thin dense'>
+											0.0
+										</div>
+										<%= totalSum %>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- <ul class="cart__item-list">
+					<% products.forEach(p => { %>
+						<li class="cart__item">
+							<h1><%= p.productId.title %></h1>
+							<h2>Quantity: <%= p.quantity %></h2>
+						</li>
+					<% }) %>
+				</ul>
+				<div class="centered">
+					<h2>Total: <%= totalSum %></h2>
+				</div>
+				<div class="centered">
+					<form action="/create-order" method="POST">
+						<script
+						src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+						data-key="pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO"
+						data-amount="<%= totalSum * 100 %>"
+						data-name="Your Order"
+						data-description="All the items you ordewred"
+						data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+						data-locale="auto"
+						data-currency="usd"></script>
+					</form>
+				</div> -->
+			</main>
+			<%- include('../includes/end.ejs') %>

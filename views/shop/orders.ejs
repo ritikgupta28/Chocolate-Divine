@@ -1,0 +1,41 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/orders.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+        <main>
+            <% if (orders.length <= 0) { %>
+              <div class="container-fluid mt-100">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+
+                <div class="card-body cart">
+                    <div class="col-sm-12 empty-cart-cls text-center" style="text-align:center"> <img src="https://ik.imagekit.io/slashit/choco_divine/box_d17XDatJFg.png"  width="130" height="130" class="img-fluid " style="  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  ">                      <h3><strong> No orders Yet !</strong></h3>
+                        <h4>Order something to make Chocolates happy 😇</h4> <a href="/products" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <% } else { %>
+                <ul class="orders">
+                    <% orders.forEach(order => { %>
+                        <li class="orders__item">
+                            <h1>Order - # <%= order._id %> - <a href="/orders/<%= order._id %>">Invoice</a></h1>
+                            <ul class="orders__products">
+                                <% order.products.forEach(p => { %>
+                                    <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </main>
+        <%- include('../includes/end.ejs') %>
