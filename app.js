@@ -100,8 +100,6 @@ app.use((req, res, next) => {
     });
 });
 
-app.post('/create-order', isAuth, shopController.postOrder);
-
 app.use(csrfProtection);
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();

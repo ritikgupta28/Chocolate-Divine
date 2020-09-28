@@ -1,13 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
+const { validationResult } = require('express-validator/check');
+
 const PDFDocument = require('pdfkit');
 const stripe = require('stripe')('pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO');
 
 const Product = require('../models/product');
 const Order = require('../models/order');
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 4;
 
 exports.getProducts = (req, res, next) => {
 	const page = +req.query.page || 1;
@@ -59,28 +61,12 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-	const page = +req.query.page || 1;
-	let totalItems;
-
 	Product.find()
-		.countDocuments()
-		.then(numProducts => {
-			totalItems = numProducts;
-			return Product.find()
-				.skip((page - 1) * ITEMS_PER_PAGE)
-				.limit(ITEMS_PER_PAGE);
-		})
 		.then(products => {
 			res.render('shop/index', {
 				prods: products,
 				pageTitle: 'Shop',
 				path: '/',
-				currentPage: page,
-				hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-				hasPreviousPage: page > 1,
-				nextPage: page + 1,
-				previousPage: page - 1,
-				lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
 			});
 		})
 		.catch(err => {
@@ -153,7 +139,9 @@ exports.getCheckout = (req, res, next) => {
 				path: '/checkout',
 				pageTitle: 'Checkout',
 				products: products,
-				totalSum: total
+				totalSum: total,
+	    		errorMessage: null,
+    			validationErrors: []
 			});
 		})
 		.catch(err => {
@@ -165,12 +153,35 @@ exports.getCheckout = (req, res, next) => {
 
 exports.postOrder = (req, res, next) => {
 	// const token = req.body.stripeToken;
-	const name = req.body.name;
+	const name = req.body.naam;
 	const location = req.body.location;
-	const number = req.body.number;
+	const number = req.body.nmbr;
 	const city = req.body.city;
 	const pincode = req.body.pincode;
 	let totalSum = 0;
+
+	const errors = validationResult(req);
+
+	if(!errors.isEmpty()) {
+		req.user
+		.populate('cart.items.productId')
+		.execPopulate()
+		.then(user => {
+			const products = user.cart.items;
+			let total = 0;
+			products.forEach(p => {
+				total += p.quantity * p.productId.price;
+			});
+			return res.status(422).render('shop/checkout', {
+				path: '/checkout',
+				pageTitle: 'Checkout',
+				products: products,
+				totalSum: total,
+		    	errorMessage: errors.array()[0].msg,
+				validationErrors: errors.array()
+			});
+		});
+	}
 
 	req.user
 		.populate('cart.items.productId')
