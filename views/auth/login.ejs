@@ -3,27 +3,7 @@
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="/css/master.css">
     <link rel="stylesheet" href="/css/stylelogin.css">
-    	<meta name="google-signin-client_id" content="54111174425-rnj75h4bll3odlc8gc01djh9b7kmn7od.apps.googleusercontent.com">
 </head>
-<script src="https://apis.google.com/js/platform.js" async defer> </script>
-<script>
-  gapi.load('auth2',()=>{
-    gapi.auth2.init();
-  })
-  function signup() {
-    document.querySelector('.sign').style.display = 'block';
-    document.querySelector('.login').style.display = 'none';
-  }
-
-  function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    console.log(googleUser);
-  }
-</script>
 
 <body>
    <%- include('../includes/navigation.ejs') %>
@@ -82,7 +62,7 @@
               <div class="social">
                 <ul>
 
-                <div class="g-signin2" data-onsuccess="onSignIn" style="margin-left:30%"><button type="button" name="button">Sign In </button></div>
+                <a href="/auth/google" ><button type="button" name="button">Sign In </button> </a>
                 </ul>
               </div>
             </div>
