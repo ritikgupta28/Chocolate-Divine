@@ -232,7 +232,7 @@ exports.postOrder = (req, res, next) => {
 	req.user
 		.populate('cart.items.productId')
 		.execPopulate()
-		.then(user => {  
+		.then(user => {
 			user.cart.items.forEach(p => {
 				totalSum += p.quantity * p.productId.price;
 			});
@@ -307,7 +307,7 @@ exports.getOrders = (req, res, next) => {
 			return next(error);
 		});
 	}
-}; 
+};
 
 exports.getInvoice = (req, res, next) => {
 	const orderId = req.params.orderId;
@@ -346,12 +346,12 @@ exports.getInvoice = (req, res, next) => {
 							' - ' +
 							prod.quantity +
 							' x ' +
-							'$' +
+							' ₹' +
 							prod.product.price
 					);
 			});
 			pdfDoc.text('---');
-			pdfDoc.fontSize(20).text('Total Price: $' + totalPrice);
+			pdfDoc.fontSize(20).text('Total Price: ₹' + totalPrice);
 			pdfDoc.text('---');
 			pdfDoc.text('Phone Number: ' + address.number);
 			pdfDoc.text('---');

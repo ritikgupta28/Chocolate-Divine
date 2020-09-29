@@ -50,8 +50,9 @@
 								<% }) %>
 							</div>
 						</div>
-						<form action="/create-order" method="POST" enctype="multipart/form-data">
+
 							<div class='credit-info'>
+									<form action="/create-order" method="POST" enctype="multipart/form-data">
 								<div class='credit-info-content'>
 									Name :
 									<input
@@ -119,8 +120,9 @@
 									<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 									<button class="btn" type="submit">Pay on Delivery</button>
 								</div>
+												</form>
 							</div>
-						</form>
+
 					</div>
 				</div>
 			</main>
