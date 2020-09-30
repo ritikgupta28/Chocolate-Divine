@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-
+const { check } = require('express-validator/check');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -137,14 +137,13 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
       userProfile=profile;
-     // console.log(userProfile)
       return done(null, userProfile);
   }
 ));
  
 app.get('/auth/google', 
   passport.authenticate('google', { scope : ['profile', 'email'] }));
- 
+
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/error' }),
   // [
@@ -160,7 +159,7 @@ app.get('/auth/google/callback',
   //         }
   //       });
   //     })
-  //     .normalizeEmail(),
+  //     .normalizeEmail()
   //   body(
   //     'password',
   //     'Please enter a password with only numbers and text and at least 5 characters.'

@@ -10,19 +10,19 @@ router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
-router.post(
-  '/login',
-  [
-    body('email')
-      .isEmail()
-      .withMessage('Please enter a valid email address.')
-      .normalizeEmail(),
-    body('password', 'Password has to be valid.')
-      .isLength({ min: 5 })
-      .trim()
-  ],
-  authController.postLogin
-);
+// router.post(
+//   '/login',
+//   // [
+//   //   body('email')
+//   //     .isEmail()
+//   //     .withMessage('Please enter a valid email address.')
+//   //     .normalizeEmail(),
+//   //   body('password', 'Password has to be valid.')
+//   //     .isLength({ min: 5 })
+//   //     .trim()
+//   // ],
+//   authController.postLogin
+// );
 
 // app.get('/auth/google/callback', 
 //   passport.authenticate('google', { failureRedirect: '/error' }),

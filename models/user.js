@@ -7,8 +7,9 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  password: {
-    type: String
+  googleId: {
+    type: String,
+    require: true
   },
   resetToken: String,
   resetTokenExpiration: Date,
