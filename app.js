@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { check } = require('express-validator/check');
+// const { check } = require('express-validator/check');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -10,16 +10,15 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
 const morgan = require('morgan');
-const authController = require('./controllers/auth');
+// const passport = require('passport');
 
-const passport = require('passport');
-
+// const authController = require('./controllers/auth');
 const errorController = require('./controllers/error');
-const shopController = require('./controllers/shop');
+// const shopController = require('./controllers/shop');
 const isAuth = require('./middleware/is-auth');
 const User = require('./models/user');
 
-const MONGODB_URI = `mongodb+srv://ritikgupta:ZU5DvtmxnizGbPsu@cluster0-mzunh.mongodb.net/chocodivine?retryWrites=true&w=majority`;
+const MONGODB_URI = `mongodb+srv://chocodivinekkr:gMXSIeeXHIZ2000K@cluster0.z7ssf.mongodb.net/chocodivine?retryWrites=true&w=majority`;
 
 const app = express();
 const store = new MongoDBStore({
@@ -113,39 +112,39 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-app.get('/success', (req, res) => res.send(userProfile));
-app.get('/error', (req, res) => res.send("error logging in"));
+// app.get('/success', (req, res) => res.send(userProfile));
+// app.get('/error', (req, res) => res.send("error logging in"));
 
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
-});
+// passport.serializeUser(function(user, cb) {
+//   cb(null, user);
+// });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
-});
+// passport.deserializeUser(function(obj, cb) {
+//   cb(null, obj);
+// });
 
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const GOOGLE_CLIENT_ID = '834372223643-ndcs8qon3tsqds4dg8jc3a41iinv0dig.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = 'oGOvNx3vs8HkjR0wWATi52mc';
-passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8000/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-      userProfile=profile;
-      return done(null, userProfile);
-  }
-));
+// const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+// const GOOGLE_CLIENT_ID = '834372223643-ndcs8qon3tsqds4dg8jc3a41iinv0dig.apps.googleusercontent.com';
+// const GOOGLE_CLIENT_SECRET = 'oGOvNx3vs8HkjR0wWATi52mc';
+// passport.use(new GoogleStrategy({
+//     clientID: GOOGLE_CLIENT_ID,
+//     clientSecret: GOOGLE_CLIENT_SECRET,
+//     callbackURL: "http://localhost:8000/auth/google/callback"
+//   },
+//   function(accessToken, refreshToken, profile, done) {
+//       userProfile=profile;
+//       return done(null, userProfile);
+//   }
+// ));
  
-app.get('/auth/google', 
-  passport.authenticate('google', { scope : ['profile', 'email'] }));
+// app.get('/auth/google', 
+//   passport.authenticate('google', { scope : ['profile', 'email'] }));
 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/error' }),
+// app.get('/auth/google/callback', 
+//   passport.authenticate('google', { failureRedirect: '/error' }),
   // [
   //   check('email')
   //     .isEmail()
@@ -175,9 +174,8 @@ app.get('/auth/google/callback',
   //       return true;
   //     })
   // ],
-  authController.postSignup
-);
-
+//   authController.postSignup
+// );
 
 app.get('/500', errorController.get500);
 

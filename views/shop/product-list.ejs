@@ -1,43 +1,50 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/product.css">
-    </head>
+		<link rel="stylesheet" href="/css/product.css">
+		</head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
-
-            <main>
-                <% if (prods.length > 0) { %>
-                    <div class="grid">
-                        <% for (let product of prods) { %>
-                            <article class="card product-item" >
-                                <header class="card__header">
-                                    <h1 class="product__title">
-                                        <%= product.title %>
-                                    </h1>
-                                </header>
-                                <div class="card__image">
-                                    <img src="/<%= product.imageUrl %>" alt="<%= product.title %>" class="center">
-                                </div>
-                                <div class="card__content">
-                                    <h2 class="product__price">$
-                                        <%= product.price %>
-                                    </h2>
-                                    <p class="product__description">
-                                        <%= product.description %>
-                                    </p>
-                                </div>
-                                <div class="card__actions">
-                                    <a href="/products/<%= product._id %>" class="btn">Details</a>
-                                    <% if (isAuthenticated) { %>
-                                        <%- include('../includes/add-to-cart.ejs', {product: product}) %>
-                                    <% } %>
-                                </div>
-                            </article>
-                            <% } %>
-                    </div>
-                    <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
-                    <% } else { %>
-                        <h1>No Products Found!</h1>
-                        <% } %>
-            </main>
-            <%- include('../includes/end.ejs') %>
+		<body>
+			<%- include('../includes/navigation.ejs') %>
+			<main>
+				<% if(prods.length > 0) { %>
+					<div class="grid">
+						<% for(let product of prods) { %>
+							<article class="card product-item" >
+								<header class="card__header">
+									<h1 class="product__title">
+										<%= product.title %>
+									</h1>
+								</header>
+								<div class="card__image">
+									<img src="/<%= product.imageUrl %>" alt="<%= product.title %>" class="center">
+								</div>
+								<div class="card__content">
+									<h2 class="product__price">$
+										<%= product.price %>
+									</h2>
+									<p class="product__description">
+										<%= product.description %>
+									</p>
+								</div>
+								<div class="card__actions">
+									<% if(isAuthenticated) { %>
+										<form action="/cart" method="POST">
+											<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    									<div class="quantity buttons_added">
+	            			  	<input type="button" value="-" class="minus">
+					             	<input type="number" step="1" min="1" max="6" name="quantity" value="0" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">
+	      				       	<input type="button" value="+" class="plus">
+		          				</div>
+									    <input type="hidden" name="productId" value="<%= product._id %>">
+									    <button class="btn btn-success" type="submit" >BUY NOW</button>
+										</form>
+									<% } %>
+								</div>
+							</article>
+						<% } %>
+					</div>
+					<%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
+				<% } else { %>
+					<h1>No Products Found!</h1>
+				<% } %>
+			</main>
+			<%- include('../includes/end.ejs') %>

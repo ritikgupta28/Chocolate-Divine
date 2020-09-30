@@ -13,9 +13,6 @@
 	 <%- include('../includes/navigation.ejs') %>
 
 		<main>
-				<% if (errorMessage) { %>
-						<div class="user-message user-message--error"><%= errorMessage %></div>
-				<% } %>
 				<div class="w3layouts-main">
 					<div class="bg-layer login">
 						<h1>
@@ -24,6 +21,9 @@
 
 						</h1>
 						<div class="header-main" style="z-index:0">
+							<% if (errorMessage) { %>
+								<div class="user-message user-message--error"><%= errorMessage %></div>
+							<% } %>
 							<div class="main-icon">
 								  <span ><img src="https://ik.imagekit.io/slashit/choco_divine/2222-removebg-preview_KfrjXNTs2-.png" alt="" style="width:100px;height:100px" class="center"></span>
 							</div>

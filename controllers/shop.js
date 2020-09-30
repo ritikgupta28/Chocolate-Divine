@@ -43,22 +43,22 @@ exports.getProducts = (req, res, next) => {
 		});
 };
 
-exports.getProduct = (req, res, next) => {
-	const prodId = req.params.productId;
-	Product.findById(prodId)
-		.then(product => {
-			res.render('shop/product-detail', {
-				product: product,
-				pageTitle: product.title,
-				path: '/products'
-			});
-		})
-		.catch(err => {
-			const error = new Error(err);
-			error.httpStatusCode = 500;
-			return next(error);
-		});
-};
+// exports.getProduct = (req, res, next) => {
+// 	const prodId = req.params.productId;
+// 	Product.findById(prodId)
+// 		.then(product => {
+// 			res.render('shop/product-detail', {
+// 				product: product,
+// 				pageTitle: product.title,
+// 				path: '/products'
+// 			});
+// 		})
+// 		.catch(err => {
+// 			const error = new Error(err);
+// 			error.httpStatusCode = 500;
+// 			return next(error);
+// 		});
+// };
 
 exports.getIndex = (req, res, next) => {
 	Product.find()
@@ -97,9 +97,11 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
 	const prodId = req.body.productId;
+	const quantity = req.body.quantity;
+	
 	Product.findById(prodId)
 		.then(product => {
-			return req.user.addToCart(product);
+			return req.user.addToCart(product, quantity);
 		})
 		.then(result => {
 			res.redirect('/cart');
@@ -343,19 +345,19 @@ exports.getInvoice = (req, res, next) => {
 					.fontSize(14)
 					.text(
 						prod.product.title +
-							' - ' +
+							': ' +
 							prod.quantity +
 							' x ' +
-							' ₹' +
-							prod.product.price
+							prod.product.price + 
+							' Rs. '
 					);
 			});
-			pdfDoc.text('---');
-			pdfDoc.fontSize(20).text('Total Price: ₹' + totalPrice);
+			pdfDoc.fontSize(20).text('---');
+			pdfDoc.text('Total Price:  Rs. ' + totalPrice);
 			pdfDoc.text('---');
 			pdfDoc.text('Phone Number: ' + address.number);
 			pdfDoc.text('---');
-			pdfDoc.text('Address: ' + address.name + ', ' + address.location + ', ' + ', '+ address.city + ', '+ address.pincode);
+			pdfDoc.text('Address: ' + address.name + ', ' + address.location + ', ' + address.city + ', '+ address.pincode);
 
 			pdfDoc.end();
 		})

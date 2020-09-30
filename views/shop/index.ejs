@@ -352,9 +352,7 @@
 	<div class="container px-5 py-24 mx-auto">
 		<div class="flex flex-wrap -m-4">
 			<% for (let product of prods) { %>
-			<div class="lg:w-1/4 md:w-1/2 p-4 w-full" data-aos="flip-left"
-     data-aos-easing="ease-out-cubic"
-     data-aos-duration="2000">
+			<div class="lg:w-1/4 md:w-1/2 p-4 w-full" data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="2000">
 				<a class="block relative h-48 rounded overflow-hidden">
 					<img alt="ecommerce" class="object-cover object-center w-full h-full block" src="<%= product.imageUrl %>">
 				</a>
@@ -362,19 +360,22 @@
 					<!-- <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3> -->
 					<h2 class="text-gray-900 title-font text-lg font-medium"><%= product.title %></h2>
 					<p class="mt-1">Price : <%= product.price %></p>
-					<p class="mt-1"><%= product.description %></p>
-					<div class="quantity buttons_added" >
-						<!-- yeh hai vo button iska css aapko style.css mai milega or iska js index.js mai merko net pe milgya tha maine copy krdiya sidha -->
-<input type="button" value="-" class="minus "><input type="number" step="1" min="0" max="" name="quantity" value="0" title="Qty" class="input-text qty text" size="4" pattern="" inputmode=""><input type="button" value="+" class="plus">
-</div>
-					<div class="card__actions" style="float:right">
-
-							<% if (isAuthenticated) { %>
-									<%- include('../includes/add-to-cart.ejs', {product: product}) %>
-							<% } %>
+					<p class="mt-1"><%= product.description %></p>					
+					<div class="card__actions">
+						<% if(isAuthenticated) { %>
+							<form action="/cart" method="POST">
+								<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    						<div class="quantity buttons_added">
+	              	<input type="button" value="-" class="minus">
+	              	<input type="number" step="1" min="1" max="6" name="quantity" value="0" title="Qty" class="input-text qty text" size="4" pattern="" inputmode="">
+	              	<input type="button" value="+" class="plus">
+		          	</div>
+						    <input type="hidden" name="productId" value="<%= product._id %>">
+						    <button class="btn btn-success" type="submit" >BUY NOW</button>
+							</form>
+						<% } %>
 					</div>
 				</div>
-
 			</div>
 			<% } %>
 		</div>
