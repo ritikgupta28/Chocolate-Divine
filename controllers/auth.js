@@ -45,8 +45,6 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-// const email = userProfile.emails[0].value;
-	
 	const email = req.body.email;
 	const password = req.body.password;
 
@@ -112,39 +110,6 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
-//   const email = userProfile.emails[0].value;
-//   const googleId = userProfile.id;
-
-//   User.findOne({ email: email })
-//     .then(user => {
-//       if (!user) {
-//         return res.status(422).render('auth/login', {
-//           path: '/login',
-//           pageTitle: 'Login',
-//           errorMessage: 'Invalid email or password.'
-//         });
-//       }
-//             req.session.isLoggedIn = true;
-//             req.session.user = user;
-//             if(email === 'ritik@ritik.com') req.session.isAdmin = true;
-//             return req.session.save(err => {
-//               res.redirect('/');
-//             });
-//           })
-//       //    }
-//         .catch(err => {
-//           const user = new User({
-//            email: email,
-//            googleId: googleId,
-//            cart: { items: [] }
-//         });
-//         user
-//        .save()
-//        .then(result => {
-//           res.redirect('/');
-//         })
-// });
-
 	const email = req.body.email;
 	const password = req.body.password;
 
