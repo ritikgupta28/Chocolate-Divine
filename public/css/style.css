@@ -59,7 +59,21 @@ Removes white gap between slides - chagnge to base color of slide images
 .quantity.buttons_added .plus:focus {
  outline: none; }
 
+ .svg-icon {
+   width: 1em;
+   height: 1em;
+ }
 
+ .svg-icon path,
+ .svg-icon polygon,
+ .svg-icon rect {
+   fill: #4691f6;
+ }
+
+ .svg-icon circle {
+   stroke: #4691f6;
+   stroke-width: 3;
+ }
 html,body
 {
   overflow-x: hidden;
