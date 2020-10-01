@@ -6,14 +6,15 @@
 
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<title>Choco-Divine</title>
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+	<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/aos.css" />
+	<link href="/css/tailwind.min.css" rel="stylesheet">
+	<script src="/js/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script> -->
+	<script src="/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -29,10 +30,10 @@
 
 </head>
 
-<body onload="start()">
+<body >
 
  <div class="preloader" >
-	 <img src="https://media.giphy.com/media/YOg3m8Q1glBxS/giphy.gif" >
+	 <img src="/images/preloader.webp" >
  </div>
 	<div class="afterloader" style="display:none">
 
@@ -41,9 +42,9 @@
 	<nav class="navbar navbar-expand-lg navbar-light bg-light sticky" >
 
 		<button class="navbar-toggler" type="button" style="float:left;border:none" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" onclick="openNav()">
-			<span ><img src="https://ik.imagekit.io/slashit/choco_divine/121994_bA7-vUbdM.png" alt="chocomenu" style="width:40px;height:40px;z-index:2"> </span>
+			<span ><img src="/images/choco.png" alt="chocomenu" style="width:40px;height:40px;z-index:2"> </span>
 		</button>
-		<span ><img src="https://ik.imagekit.io/slashit/choco_divine/2222-removebg-preview_KfrjXNTs2-.png" alt="" style="width:60px;height:60px" class="center"></span>
+		<span ><img src="/images/logo.png" alt="" style="width:60px;height:60px" class="center"></span>
 		<!-- <a href="#"><span class="fa fa-user"></span></a> -->
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav">
@@ -177,10 +178,10 @@
 										What image sizes should you use? This can help - https://codepen.io/JacobLett/pen/NjramL
 										 -->
 										 <picture>
-											<source srcset="https://ik.imagekit.io/slashit/choco_divine/to_sweetness____-K6NkIPaD.png" media="(min-width: 1400px)">
+											<!-- <source srcset="https://ik.imagekit.io/slashit/choco_divine/to_sweetness____-K6NkIPaD.png" media="(min-width: 1400px)">
 											<source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__2__C_n9QGkvsO.png" media="(min-width: 769px)">
 											 <source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__1__ifRxaiPpP.png" media="(min-width: 577px)">
-											<img srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled_iSwVw4eSJ.png" alt="responsive image" class="d-block img-fluid">
+											<img srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled_iSwVw4eSJ.png" alt="responsive image" class="d-block img-fluid"> -->
 										</picture>
 
 										<!-- <div class="carousel-caption">
@@ -195,12 +196,12 @@
 						<!-- /.carousel-item -->
 						<div class="carousel-item">
 
-										 <picture>
+										 <!-- <picture>
 											<source srcset="https://ik.imagekit.io/slashit/choco_divine/to_sweetness____-K6NkIPaD.png" media="(min-width: 1400px)">
 											<source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__2__C_n9QGkvsO.png" media="(min-width: 769px)">
 											 <source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__1__ifRxaiPpP.png" media="(min-width: 577px)">
 											<img srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled_iSwVw4eSJ.png" alt="responsive image" class="d-block img-fluid">
-										</picture>
+										</picture> -->
 
 										<!-- <div class="carousel-caption justify-content-center align-items-center">
 												<div>
@@ -214,12 +215,12 @@
 						<!-- /.carousel-item -->
 						<div class="carousel-item">
 
-										 <picture>
+										 <!-- <picture>
 											<source srcset="https://dummyimage.com/2000x500/007aeb/4196e5" media="(min-width: 1400px)">
 											<source srcset="https://dummyimage.com/1400x500/007aeb/4196e5" media="(min-width: 769px)">
 											 <source srcset="https://dummyimage.com/800x500/007aeb/4196e5" media="(min-width: 577px)">
 											<img srcset="https://dummyimage.com/600x500/007aeb/4196e5" alt="responsive image" class="d-block img-fluid">
-										</picture>
+										</picture> -->
 
 
 								</a>
@@ -407,7 +408,7 @@
 		padding-right: 0px;
 		right: 10px;
 ">
-			<iframe width="100%" height="100%" class="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Kurukshetra&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.4);"></iframe>
+			<!-- <iframe width="100%" height="100%" class="absolute inset-0" frameborder="0" title="map" marginheight="0" marginwidth="0" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=Kurukshetra&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.4);"></iframe> -->
 			<div class="bg-white relative flex flex-wrap py-6">
 				<div class="lg:w-1/2 px-6">
 					<h2 class="title-font font-medium text-gray-900 tracking-widest text-sm">ADDRESS</h2>
@@ -438,7 +439,7 @@
 	>
 	<div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
 		<a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-				<span ><img src="https://ik.imagekit.io/slashit/choco_divine/2222-removebg-preview_KfrjXNTs2-.png" alt="" style="width:60px;height:60px" class="center"></span>
+				<span ><img src="/images/logo.png" alt="" style="width:60px;height:60px" class="center"></span>
 
 			<span class="ml-3 text-xl">CHOCODIVINE</span>
 		</a>
@@ -475,12 +476,10 @@
 <!-- end -->
 	</div>
 
-
+	<script src="/js/aos.js"></script>
 	<script src="/js/index.js" charset="utf-8"></script>
-	<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
- <script>
-	 AOS.init();
- </script>
+
+
 </body>
 
 </html>
