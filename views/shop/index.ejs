@@ -24,6 +24,7 @@
 			<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
 				<link rel="manifest" href="/site.webmanifest">
+					<script src="/js/aos.js"></script>
 
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -41,7 +42,7 @@
 	<!-- navbar  -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light sticky" >
 
-		<button class="navbar-toggler" type="button" style="float:left;border:none" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" onclick="openNav()">
+		<button class="navbar-toggler" type="button" style="float:left;border:none" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" >
 			<span ><img src="/images/choco.png" alt="chocomenu" style="width:40px;height:40px;z-index:2"> </span>
 		</button>
 		<span ><img src="/images/logo.png" alt="" style="width:60px;height:60px" class="center"></span>
@@ -104,26 +105,24 @@
 
 	<!-- navbar ends -->
 	<div id="mySidenav" class="sidenav">
-		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a class="nav-link" href="/" onclick="closeNav()">HOME <span class="sr-only">(current)</span></a>
-		<a class="<%= path === '/products' ? 'active' : '' %>" href="/products" onclick="closeNav()">PRODUCTS</a>
+		<a href="javascript:void(0)" class="closebtn" >&times;</a>
+		<a class="nav-link" href="/" onclick="closeNav">HOME <span class="sr-only">(current)</span></a>
+		<a class="<%= path === '/products' ? 'active' : '' %> nav-link" href="/products" onclick="closeNav()">PRODUCTS</a>
 		<% if(!isAuthenticated){ %>
-		<a class="<%= path === '/login' ? 'active' : '' %>" href="/login" onclick="closeNav()">LOGIN</a>
-		<a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup" onclick="closeNav()">SIGNUP</a>
+		<a class="<%= path === '/login' ? 'active' : '' %> nav-link" href="/login" onclick="closeNav()">LOGIN</a>
+		<a class="<%= path === '/signup' ? 'active' : '' %> nav-link" href="/signup" onclick="closeNav()">SIGNUP</a>
 	<%}
 		else{ %>
-		<a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart" onclick="closeNav()">CART</a>
-		<a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders" onclick="closeNav()">MY ORDERS</a>
+		<a class="<%= path === '/cart' ? 'active' : '' %> nav-link" href="/cart" onclick="closeNav()">CART</a>
+		<a class="<%= path === '/orders' ? 'active' : '' %> nav-link" href="/orders" onclick="closeNav()">MY ORDERS</a>
 	<%} %>
 	<% if(isAdminAuthenticated) { %>
-
-
 
 			<a class="nav-link" class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">ADD PRODUCT</a>
 			<a class="nav-link" class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">ADMIN PRODUCTS</a>
 
 	<% } %>
-		<a href="/#contactus" onclick="closeNav()">CONTACT US</a>
+		<a href="/#contactus" onclick="closeNav()" class="nav-link">CONTACT US</a>
 
 	</div>
 	<!-- side bar ends -->
@@ -178,10 +177,9 @@
 										What image sizes should you use? This can help - https://codepen.io/JacobLett/pen/NjramL
 										 -->
 										 <picture>
-											<!-- <source srcset="https://ik.imagekit.io/slashit/choco_divine/to_sweetness____-K6NkIPaD.png" media="(min-width: 1400px)">
-											<source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__2__C_n9QGkvsO.png" media="(min-width: 769px)">
-											 <source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__1__ifRxaiPpP.png" media="(min-width: 577px)">
-											<img srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled_iSwVw4eSJ.png" alt="responsive image" class="d-block img-fluid"> -->
+											<source srcset="/images/c12.png" media="(min-width: 1400px)">
+
+											<img srcset="/images/c1.png" alt="responsive image" class="d-block img-fluid">
 										</picture>
 
 										<!-- <div class="carousel-caption">
@@ -196,12 +194,12 @@
 						<!-- /.carousel-item -->
 						<div class="carousel-item">
 
-										 <!-- <picture>
-											<source srcset="https://ik.imagekit.io/slashit/choco_divine/to_sweetness____-K6NkIPaD.png" media="(min-width: 1400px)">
-											<source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__2__C_n9QGkvsO.png" media="(min-width: 769px)">
-											 <source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__1__ifRxaiPpP.png" media="(min-width: 577px)">
-											<img srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled_iSwVw4eSJ.png" alt="responsive image" class="d-block img-fluid">
-										</picture> -->
+										 <picture>
+											<source srcset="/images/c22.png" media="(min-width: 1400px)">
+											<!-- <source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__2__C_n9QGkvsO.png" media="(min-width: 769px)">
+											 <source srcset="https://ik.imagekit.io/slashit/choco_divine/Copy_of_Untitled__1__ifRxaiPpP.png" media="(min-width: 577px)"> -->
+											<img srcset="/images/c2.png" alt="responsive image" class="d-block img-fluid">
+										</picture>
 
 										<!-- <div class="carousel-caption justify-content-center align-items-center">
 												<div>
@@ -215,12 +213,11 @@
 						<!-- /.carousel-item -->
 						<div class="carousel-item">
 
-										 <!-- <picture>
-											<source srcset="https://dummyimage.com/2000x500/007aeb/4196e5" media="(min-width: 1400px)">
-											<source srcset="https://dummyimage.com/1400x500/007aeb/4196e5" media="(min-width: 769px)">
-											 <source srcset="https://dummyimage.com/800x500/007aeb/4196e5" media="(min-width: 577px)">
-											<img srcset="https://dummyimage.com/600x500/007aeb/4196e5" alt="responsive image" class="d-block img-fluid">
-										</picture> -->
+										 <picture>
+											<source srcset="/images/c3.png" media="(min-width: 1400px)">
+
+											<img srcset="/images/c3small.png" alt="responsive image" class="d-block img-fluid">
+										</picture>
 
 
 								</a>
@@ -476,7 +473,7 @@
 <!-- end -->
 	</div>
 
-	<script src="/js/aos.js"></script>
+
 	<script src="/js/index.js" charset="utf-8"></script>
 
 

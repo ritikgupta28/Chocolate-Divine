@@ -1,12 +1,12 @@
 // new WOW().init();
-
+ document.querySelector('body').onload = start();
   function start() {
     document.querySelector('.preloader').style.display = 'none';
     document.querySelector('.afterloader').style.display = 'block';
 
   }
 
- document.querySelector('body').onload = start();
+
   // var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1W8N6vNM_8leqLLZR1EDRnHgqHTXRDy7e_nB6q21wvAw/edit?usp=sharing';
   //
   // function init() {
@@ -20,10 +20,20 @@
   // }
   //
   // window.addEventListener('DOMContentLoaded', init);
-  AOS.init();
 
+
+document.querySelector('.navbar-toggler').addEventListener("click" ,()=>{
+  openNav();
+});
+document.querySelector('.closebtn').addEventListener("click" ,()=>{
+  closeNav();
+})
+document.querySelector('.nav-link').addEventListener("click" ,()=>{
+  closeNav();
+})
   function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
+
   }
 
   /* Set the width of the side navigation to 0 */
@@ -53,3 +63,4 @@ String.prototype.getDecimals || (String.prototype.getDecimals = function() {
         e = a.attr("step");
     b && "" !== b && "NaN" !== b || (b = 0), "" !== c && "NaN" !== c || (c = ""), "" !== d && "NaN" !== d || (d = 0), "any" !== e && "" !== e && void 0 !== e && "NaN" !== parseFloat(e) || (e = 1), jQuery(this).is(".plus") ? c && b >= c ? a.val(c) : a.val((b + parseFloat(e)).toFixed(e.getDecimals())) : d && b <= d ? a.val(d) : b > 0 && a.val((b - parseFloat(e)).toFixed(e.getDecimals())), a.trigger("change")
 });
+  AOS.init();

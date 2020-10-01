@@ -67,7 +67,7 @@ h1 {
 }
 
 .w3layouts-main{
-    background-image: url('https://ik.imagekit.io/slashit/choco_divine/photo-1547043184-599cd7e6acb9_mBKtecKJA.jpg');
+    background-image: url('/images/login.jpg');
     background-repeat: repeat-x;
 
     background-size: cover;
