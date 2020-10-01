@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-// const { check } = require('express-validator/check');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -127,7 +126,10 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(MONGODB_URI)
+  .connect(MONGODB_URI, { 
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(result => {
     app.listen(process.env.PORT || 3000);
   })

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 const PDFDocument = require('pdfkit');
 const stripe = require('stripe')(process.env.STRIPE);
