@@ -82,7 +82,7 @@ exports.postLogin = (req, res, next) => {
 					if(doMatch) {
 						req.session.isLoggedIn = true;
 						req.session.user = user;
-						if(email === 'ritik@ritik.com') req.session.isAdmin = true;
+						if(email === process.env.ADMIN_EMAIL ) req.session.isAdmin = true;
 						return req.session.save(err => {
 							res.redirect('/');
 						});

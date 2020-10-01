@@ -10,12 +10,14 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
 const morgan = require('morgan');
+const helmet = require('helmet');
+const compression = require('compression');
 
 const errorController = require('./controllers/error');
 const isAuth = require('./middleware/is-auth');
 const User = require('./models/user');
 
-const MONGODB_URI = `mongodb+srv://chocodivinekkr:gMXSIeeXHIZ2000K@cluster0.z7ssf.mongodb.net/chocodivine?retryWrites=true&w=majority`;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.z7ssf.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
 const store = new MongoDBStore({
@@ -51,6 +53,8 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
+app.use(helmet());
+app.use(compression());
 
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, 'access.log'),
@@ -125,7 +129,7 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
-    app.listen(8000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch(err => {
     console.log(err);

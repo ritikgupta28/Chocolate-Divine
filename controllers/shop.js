@@ -4,7 +4,7 @@ const path = require('path');
 const { validationResult } = require('express-validator/check');
 
 const PDFDocument = require('pdfkit');
-const stripe = require('stripe')('pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO');
+const stripe = require('stripe')(process.env.STRIPE);
 
 const Product = require('../models/product');
 const Order = require('../models/order');
@@ -166,7 +166,7 @@ exports.postOrderMark = (req, res, next) => {
 			return next(error);
 	});
 	setTimeout(() => {
-	if(req.user.email === 'ritik@ritik.com') {
+	if(req.user.email === process.env.ADMIN_EMAIL) {
 	Order.find().sort({'isDone': 1})
 	.then(orders => {
 		res.render('shop/orders', {
@@ -279,7 +279,7 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-	if(req.user.email === 'ritik@ritik.com') {
+	if(req.user.email === process.env.ADMIN_EMAIL ) {
 	Order.find().sort({'isDone': 1})
 	.then(orders => {
 		res.render('shop/orders', {
@@ -318,7 +318,7 @@ exports.getInvoice = (req, res, next) => {
 			if (!order) {
 				return next(new Error('No order found.'));
 			}
-			if (req.user.email !== 'ritik@ritik.com' && order.user.userId.toString() !== req.user._id.toString()) {
+			if (req.user.email !== process.env.ADMIN_EMAIL && order.user.userId.toString() !== req.user._id.toString()) {
 				return next(new Error('Unauthorized'));
 			}
 			const invoiceName = 'invoice-' + orderId + '.pdf';

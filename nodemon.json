@@ -1,0 +1,9 @@
+{
+	"env": {
+		"MONGO_USER": "chocodivinekkr",
+		"MONGO_PASSWORD": "gMXSIeeXHIZ2000K",
+		"MONGO_DEFAULT_DATABASE": "chocodivine",
+		"ADMIN_EMAIL": "chocolatedivinekkr@gmail.com",
+		"STRIPE": "pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO"
+	}
+}
