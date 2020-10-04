@@ -6,13 +6,13 @@
 <body>
    <%- include('../includes/navigation.ejs') %>
 
-    <main>
+    <main class="center" style="    text-align: -webkit-center;">
         <% if (errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
         <!-- try -->
 
-<form class="form-horizontal center" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data">
+<form class="form-horizontal" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data">
 <fieldset>
 
 <!-- Form Name -->
@@ -29,7 +29,7 @@
         type="text"
         name="title"
         id="title"
-        placeholder="PRODUCT TITLE" class="form-control input-md"
+       class="form-control input-md"
         value="<% if (editing || hasError) { %><%= product.title %><% } %>">
 
   </div>
@@ -45,7 +45,7 @@
         name="price"
         id="price"
         step="0.01"
-        placeholder="PRICE" class="form-control input-md"
+         class="form-control input-md"
         value="<% if (editing || hasError) { %><%= product.price %><% } %>">
 
   </div>
@@ -63,7 +63,7 @@
         class="<%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
         name="description"
         id="description"
-        placeholder="DESCRIPTION" class="form-control input-md"
+         class="form-control input-md"
         rows="5"><% if (editing || hasError) { %><%= product.description %><% } %></textarea>
   </div>
 </div>
