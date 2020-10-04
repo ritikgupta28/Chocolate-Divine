@@ -43,23 +43,6 @@ exports.getProducts = (req, res, next) => {
 		});
 };
 
-// exports.getProduct = (req, res, next) => {
-// 	const prodId = req.params.productId;
-// 	Product.findById(prodId)
-// 		.then(product => {
-// 			res.render('shop/product-detail', {
-// 				product: product,
-// 				pageTitle: product.title,
-// 				path: '/products'
-// 			});
-// 		})
-// 		.catch(err => {
-// 			const error = new Error(err);
-// 			error.httpStatusCode = 500;
-// 			return next(error);
-// 		});
-// };
-
 exports.getIndex = (req, res, next) => {
 	Product.find()
 		.then(products => {
