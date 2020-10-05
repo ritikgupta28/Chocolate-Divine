@@ -3,29 +3,29 @@ const https = require('https');
 const qs = require('querystring');
 const port = 3000;
 const checksum_lib = require('../paytm/checksum/checksum');
-
+var today = new Date();
 var PaytmConfig = {
 	mid: "NCAfMA53556886213203",
-	key: "KzkRB6v8cGFQMwjO",
+	key: "KzkRB6v8cGFQMwJO",
 	website: "WEBSTAGING"
 }
 
 exports.paynow = (req, res, next) => {
 	    var params = {};
-			params['MID'] 					= PaytmConfig.mid;
-			params['WEBSITE']				= PaytmConfig.website;
-			params['CHANNEL_ID']			= 'WEB';
-			params['INDUSTRY_TYPE_ID']	= 'Retail';
-			params['ORDER_ID']			= 'TEST_'  + new Date().getTime();
-			params['CUST_ID'] 			= 'Customer001';
-			params['TXN_AMOUNT']			= '1.00';
-			params['CALLBACK_URL']		= 'http://localhost:'+port+'/callback';
-			params['EMAIL']				= 'abc@mailinator.com';
-			params['MOBILE_NO']			= '7777777777';
+			params['MID'] = PaytmConfig.mid;
+			params['WEBSITE']	= PaytmConfig.website;
+			params['CHANNEL_ID'] = 'WEB';
+			params['INDUSTRY_TYPE_ID'] = 'Retail';
+			params['ORDER_ID'] = 'ORD' + today.getDate()+today.getHours()+today.getMinutes()+today.getSeconds();
+			params['CUST_ID'] = 'CUS'+ today.getDate()+today.getHours()+today.getMinutes()+today.getSeconds();
+			params['TXN_AMOUNT'] = '100';
+			params['CALLBACK_URL'] = 'http://localhost:'+port+'/callback';
+			params['EMAIL']	= 'abc@gmail.com';
+			params['MOBILE_NO']	= '777777777';
 
 			checksum_lib.genchecksum(params, PaytmConfig.key, function (err, checksum) {
 
-				var txn_url = "https://securegw-stage.paytm.in/theia/processTransaction"; // for staging
+				var txn_url = "https://securegw-stage.paytm.in/order/process"; // for staging
 				// var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
 				
 				var form_fields = "";
