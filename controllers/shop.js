@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const checksum_lib = require('../Paytm_Web_Sample_Kit_NodeJs/checksum/checksum')
+const checksum_lib = require('../Paytm/checksum/checksum')
 const { validationResult } = require('express-validator');
 
 const PDFDocument = require('pdfkit');
