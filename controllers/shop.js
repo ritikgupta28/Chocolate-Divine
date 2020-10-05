@@ -243,7 +243,7 @@ exports.postOrder = (req, res, next) => {
 			return order.save();
 		})
 		.then(result => { 
-			let params = {}
+			let params = {};
 			// params['MID'] = 'NCAfMA53556886213203',
 			// params['WEBSITE'] = 'WEBSTAGING',
 			// params['CHANNEL_ID'] = 'WEB',
@@ -254,16 +254,17 @@ exports.postOrder = (req, res, next) => {
 			// params['CALLBACK_URL'] = 'http://localhost:' + port + '/callback',
 			// params['EMAIL'] = `${req.user.email}`,
 			// params['MOBILE_NO'] = `${number}`
-			params['MID'] = 'NCAfMA53556886213203',
-			params['WEBSITE'] = 'WEBSTAGING',
-			params['CHANNEL_ID'] = 'WEB',
-			params['INDUSTRY_TYPE_ID'] = 'Retail',
-			params['ORDER_ID'] = 'ORD0001',
-			params['CUST_ID'] = 'CUST0011',
+			const port = 3000;
+			params['MID'] = 'NCAfMA53556886213203';
+			params['WEBSITE'] = 'WEBSTAGING';
+			params['CHANNEL_ID'] = 'WEB';
+			params['INDUSTRY_TYPE_ID'] = 'Retail';
+			params['ORDER_ID'] = 'ORD0001';
+			params['CUST_ID'] = 'CUST0011';
 			params['TXN_AMOUNT'] = '100',
-			params['CALLBACK_URL'] = 'http://localhost:3000/callback',
-			params['EMAIL'] = 'xyz@gmail.com',
-			params['MOBILE_NO'] = '9876543210'
+			params['CALLBACK_URL'] = 'http://localhost:3000/products';
+			params['EMAIL'] = 'xyz@gmail.com';
+			params['MOBILE_NO'] = '9876543210';
 
 			checksum_lib.genchecksum(params, 'KzkRB6v8cGFQMwjO', function(err, checksum) {
 				let txn_url = "https://securegw-stage.paytm.in/order/process"
@@ -274,12 +275,8 @@ exports.postOrder = (req, res, next) => {
 				}
 
 				form_fields += "<input type='hidden' name='CHECKSUMHASH' value='"+checksum+"' />"
-
-				var html = '<html><body><center><h1>Please wait! Do not refresh the page</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script type="text/javascript">document.f1.submit();</script></body></html>' 
 			  res.writeHead(200, {'Content-Type': 'text/html'})
-			  res.write(html, function(err) {
-			  	res.end();
-			  })
+			  res.write('<html><body><center><h1>Please wait! Do not refresh the page</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>')
 			  res.end()
 			}) 
 			// const charge = stripe.charges.create({
