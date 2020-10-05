@@ -51,7 +51,6 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
-const paytmRoutes = require('./routes/paytm');
 app.use(helmet());
 app.use(compression());
 
@@ -111,7 +110,6 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
-app.use(paytmRoutes);
 
 app.get('/500', errorController.get500);
 app.get('/404', errorController.get404);

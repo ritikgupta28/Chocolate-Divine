@@ -18,9 +18,11 @@ router.post('/cart', isAuth, shopController.postCart);
 
 router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
+router.use('/ordermark/:orderId', isAuth, shopController.postOrderMark);
+
 router.get('/checkout', isAuth, shopController.getCheckout);
 
-router.use('/ordermark/:orderId', isAuth, shopController.postOrderMark);
+router.use('/callback', isAuth, shopController.callback);
 
 router.get('/orders', isAuth, shopController.getOrders);
 
