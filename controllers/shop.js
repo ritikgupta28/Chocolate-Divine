@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const checksum_lib = require('../Paytm/checksum/checksum')
+const paytmServer = require('../Paytm/checksum/server')
 const { validationResult } = require('express-validator');
 
 const PDFDocument = require('pdfkit');
@@ -243,55 +243,11 @@ exports.postOrder = (req, res, next) => {
 			return order.save();
 		})
 		.then(result => { 
-			let params = {};
-			// params['MID'] = 'NCAfMA53556886213203',
-			// params['WEBSITE'] = 'WEBSTAGING',
-			// params['CHANNEL_ID'] = 'WEB',
-			// params['INDUSTRY_TYPE_ID'] = 'Retail',
-			// params['ORDER_ID'] = `${result._id}`,
-			// params['CUST_ID'] = `${req.user._id}`,
-			// params['TXN_AMOUNT'] = `${totalSum}`,
-			// params['CALLBACK_URL'] = 'http://localhost:' + port + '/callback',
-			// params['EMAIL'] = `${req.user.email}`,
-			// params['MOBILE_NO'] = `${number}`
-			const port = 3000;
-			params['MID'] = 'NCAfMA53556886213203';
-			params['WEBSITE'] = 'WEBSTAGING';
-			params['CHANNEL_ID'] = 'WEB';
-			params['INDUSTRY_TYPE_ID'] = 'Retail';
-			params['ORDER_ID'] = 'ORD0001';
-			params['CUST_ID'] = 'CUST0011';
-			params['TXN_AMOUNT'] = '100',
-			params['CALLBACK_URL'] = 'http://localhost:3000/products';
-			params['EMAIL'] = 'xyz@gmail.com';
-			params['MOBILE_NO'] = '9876543210';
-
-			checksum_lib.genchecksum(params, 'KzkRB6v8cGFQMwjO', function(err, checksum) {
-				let txn_url = "https://securegw-stage.paytm.in/order/process"
-
-				let form_fields = ""
-				for(x in params) {
-					form_fields += "<input type='hidden' name='"+x+"' value='"+params[x]+"'/>"
-				}
-
-				form_fields += "<input type='hidden' name='CHECKSUMHASH' value='"+checksum+"' />"
-			  res.writeHead(200, {'Content-Type': 'text/html'})
-			  res.write('<html><body><center><h1>Please wait! Do not refresh the page</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>')
-			  res.end()
-			}) 
-			// const charge = stripe.charges.create({
-			// 	amount: totalSum * 100,
-			// 	currency: 'usd',
-			// 	description: 'Demo Order',
-			// 	source: token,
-			// 	metadata: { order_id: result._id.toString() }
-			// });
+			res.redirect('/paynow');
 			return req.user.clearCart();
 		})
-		.then(() => {
-			res.redirect('/orders');
-		})
 		.catch(err => {
+			console.log(err);
 			const error = new Error(err);
 			error.httpStatusCode = 500;
 			return next(error);

@@ -1,8 +1,8 @@
 const http = require('http');
 const https = require('https');
 const qs = require('querystring');
-const port = 8080;
-const checksum_lib = require('./checksum.js');
+const port = 3000;
+const checksum_lib = require('../paytm/checksum/checksum');
 
 var PaytmConfig = {
 	mid: "NCAfMA53556886213203",
@@ -10,12 +10,8 @@ var PaytmConfig = {
 	website: "WEBSTAGING"
 }
 
-
-http.createServer(function (req, res) {
-
-	switch(req.url){
-		case "/create-order":
-			var params 						= {};
+exports.paynow = (req, res, next) => {
+	    var params = {};
 			params['MID'] 					= PaytmConfig.mid;
 			params['WEBSITE']				= PaytmConfig.website;
 			params['CHANNEL_ID']			= 'WEB';
@@ -39,14 +35,13 @@ http.createServer(function (req, res) {
 				form_fields += "<input type='hidden' name='CHECKSUMHASH' value='"+checksum+"' >";
 
 				res.writeHead(200, {'Content-Type': 'text/html'});
-				res.write('<html><head><title>Merchant Checkout Page</title></head><body><center><h1>Please do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script type="text/javascript">document.f1.submit();</script></body></html>');
+				res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait!. Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
 				res.end();
 			});
-		break;
-	
-		case "/callback":
+};
 
-			var body = '';
+exports.callback = (req, res, next) => {
+	var body = '';
 	        
 	        req.on('data', function (data) {
 	            body += data;
@@ -124,9 +119,4 @@ http.createServer(function (req, res) {
 					post_req.end();
 				});
 	        });
-			
-		break;
-	}
-	
-
-}).listen(port);
+}
