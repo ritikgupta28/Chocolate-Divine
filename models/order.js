@@ -24,7 +24,11 @@ const orderSchema = new Schema({
     type: Boolean,
     default: false
   },
-  paid: {
+  paymentType: {
+    type: String,
+    default: "delivery"
+  },
+  paymentDone: {
     type: Boolean,
     default: false
   },

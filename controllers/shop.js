@@ -11,12 +11,9 @@ const Order = require('../models/order');
 
 const ITEMS_PER_PAGE = 4;
 
-const http = require('http');
 const https = require('https');
 const qs = require('querystring');
-const port = 3000;
 const checksum_lib = require('../paytm/checksum/checksum');
-var today = new Date();
 
 var PaytmConfig = {
 	mid: "NCAfMA53556886213203",
@@ -201,8 +198,9 @@ exports.postOrder = (req, res, next) => {
 	const number = req.body.nmbr;
 	const city = req.body.city;
 	const pincode = req.body.pincode;
-	const paid = true;
+	const paymentType = req.body.paymentMode;
 	let totalSum = 0;
+	console.log(paymentType)
 
 	const errors = validationResult(req);
 
@@ -227,7 +225,6 @@ exports.postOrder = (req, res, next) => {
 		});
 	}
 
-	if(paid) {
 		req.user
 			.populate('cart.items.productId')
 			.execPopulate()
@@ -245,7 +242,7 @@ exports.postOrder = (req, res, next) => {
 						email: req.user.email,
 						userId: req.user
 					},
-					paid: paid,
+					paymentType: paymentType,
 					address: {
 						name: name,
 						location: location,
@@ -257,6 +254,8 @@ exports.postOrder = (req, res, next) => {
 				return order.save();
 			})
 			.then(result => {
+				console.log('123')
+				if(paymentType === "paytm") {
 				var params = {};
 				params['MID'] = PaytmConfig.mid;
 				params['WEBSITE']	= PaytmConfig.website;
@@ -265,7 +264,7 @@ exports.postOrder = (req, res, next) => {
 				params['ORDER_ID'] = result._id.toString();
 				params['CUST_ID'] = req.user._id.toString();
 				params['TXN_AMOUNT'] = totalSum;
-				params['CALLBACK_URL'] = 'http://localhost:'+port+'/callback';
+				params['CALLBACK_URL'] = 'http://localhost:3000/callback';
 				params['EMAIL']	= req.user.email;
 				params['MOBILE_NO']	= result.address.number;
 
@@ -280,9 +279,10 @@ exports.postOrder = (req, res, next) => {
 					form_fields += "<input type='hidden' name='CHECKSUMHASH' value='"+checksum+"' >";
 
 					res.writeHead(200, {'Content-Type': 'text/html'});
-					res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait!. Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
+					res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait! Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
 					res.end();
 				});
+			}
 				req.user.clearCart();
 			})
 			.catch(err => {
@@ -290,48 +290,6 @@ exports.postOrder = (req, res, next) => {
 				error.httpStatusCode = 500;
 				return next(error);
 			});
-	}
-	else {
-		req.user
-			.populate('cart.items.productId')
-			.execPopulate()
-			.then(user => {
-				user.cart.items.forEach(p => {
-					totalSum += p.quantity * p.productId.price;
-				});
-
-				const products = user.cart.items.map(i => {
-					return { quantity: i.quantity, product: { ...i.productId._doc } };
-				});
-				const order = new Order({
-					products: products,
-					user: {
-						email: req.user.email,
-						userId: req.user
-					},
-					paid: paid,
-					address: {
-						name: name,
-						location: location,
-						number: number,
-						city: city,
-						pincode: pincode
-					}
-				});
-				return order.save();
-			})
-			.then(result => {
-				return req.user.clearCart();
-			})
-			.then (() => {
-				res.redirect('/orders');
-			})
-			.catch(err => {
-				const error = new Error(err);
-				error.httpStatusCode = 500;
-				return next(error);
-			});
-	}
 };
 
 exports.callback = (req, res, next) => {
@@ -341,23 +299,36 @@ exports.callback = (req, res, next) => {
 	});
 	req.on('end', function () {
 		var html = "";
-		html += "<a href='http://localhost:3000/orders'>Go to Orders</a>"
-		var post_data = qs.parse(body);
-
-		// received params in callback
-		// html += "<b>Callback Response</b><br>";
-		// for(var x in post_data) {
-		// 	html += x + " => " + post_data[x] + "<br/>";
-		// }
+		html += "<a href='http://localhost:3000/orders'>Go to Orders</a>";
 		html += "<br/><br/>";
-
+		var post_data = qs.parse(body);
 		// verify the checksum
 		var checksumhash = post_data.CHECKSUMHASH;
 		// delete post_data.CHECKSUMHASH;
 		var result = checksum_lib.verifychecksum(post_data, PaytmConfig.key, checksumhash);
-		html += "<b>Result</b> => " + (result? "Payment is done" : "Ye kyu chlega ?");
+		// received params in callback
+		if(result) {
+		html += "<b>Callback Response</b><br>";
+		for(var x in post_data) {
+			html += x + " => " + post_data[x] + "<br/>";
+		}
+	}
+		html += "<br/><br/>";
 		// html += "<br/><br/>";
-
+		Order.findById(post_data.ORDERID)
+			.then(order => {
+				if(order) {
+					if(post_data["STATUS"] === "TXN_SUCCESS") {
+						order.paymentDone = true;
+					}
+					return order.save();
+				}
+			})
+			.catch(err => {
+				const error = new Error(err);
+			  error.httpStatusCode = 500;
+			  return next(error);
+			})
 		// Send Server-to-Server request to verify Order Status
 		var params = {"MID": PaytmConfig.mid, "ORDERID": post_data.ORDERID};
 		checksum_lib.genchecksum(params, PaytmConfig.key, function (err, checksum) {
@@ -458,8 +429,11 @@ exports.getInvoice = (req, res, next) => {
 				underline: true
 			});
 			pdfDoc.text('-----------------------');
+			pdfDoc.fontSize(25).text('CHOCO-DIVINE');
+			pdfDoc.text('-----------------------');
 			let totalPrice = 0;
 			let address = order.address;
+			let paymentMode = order.paymentType
 			order.products.forEach(prod => {
 				totalPrice += prod.quantity * prod.product.price;
 				pdfDoc
@@ -474,12 +448,12 @@ exports.getInvoice = (req, res, next) => {
 					);
 			});
 			pdfDoc.fontSize(20).text('---');
+			pdfDoc.text('Payment Mode: ' + paymentMode);
 			pdfDoc.text('Total Price:  Rs. ' + totalPrice);
 			pdfDoc.text('---');
 			pdfDoc.text('Phone Number: ' + address.number);
 			pdfDoc.text('---');
 			pdfDoc.text('Address: ' + address.name + ', ' + address.location + ', ' + address.city + ', '+ address.pincode);
-
 			pdfDoc.end();
 		})
 		.catch(err => next(err));

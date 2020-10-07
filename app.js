@@ -17,6 +17,7 @@ const errorController = require('./controllers/error');
 const isAuth = require('./middleware/is-auth');
 const User = require('./models/user');
 
+// mongodb+srv://chocodivinekkr:gMXSIeeXHIZ2000K@cluster0.z7ssf.mongodb.net/chocodivine?retryWrites=true&w=majority
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.z7ssf.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
 
 const app = express();
