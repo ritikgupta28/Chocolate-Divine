@@ -295,16 +295,16 @@ exports.postOrder = (req, res, next) => {
 
 exports.callback = (req, res, next) => {
 	var body = '';
-	console.log('3');
 	req.on('data', function (data) {
 		body += data;
 	});
 	req.on('end', function () {
 		var html = "";
+		html += "<a href='http://localhost:3000/orders'>Go to Orders</a>"
 		var post_data = qs.parse(body);
 
 		// received params in callback
-		console.log('Callback Response: ', post_data, "\n");
+		//console.log("\n" ,'Callback Response: ', post_data, "\n");
 		html += "<b>Callback Response</b><br>";
 		for(var x in post_data) {
 			html += x + " => " + post_data[x] + "<br/>";
@@ -315,7 +315,7 @@ exports.callback = (req, res, next) => {
 		var checksumhash = post_data.CHECKSUMHASH;
 		// delete post_data.CHECKSUMHASH;
 		var result = checksum_lib.verifychecksum(post_data, PaytmConfig.key, checksumhash);
-		console.log("Checksum Result => ", result, "\n");
+		//console.log("Checksum Result => ", result, "\n");
 		html += "<b>Checksum Result</b> => " + (result? "True" : "False");
 		html += "<br/><br/>";
 
@@ -342,7 +342,7 @@ exports.callback = (req, res, next) => {
 					response += chunk;
 				});
 				post_res.on('end', function() {
-					console.log('S2S Response: ', response, "\n");
+					//console.log('S2S Response: ', response, "\n");
 					var _result = JSON.parse(response);
 					html += "<b>Status Check Response</b><br>";
 					for(var x in _result) {
@@ -357,7 +357,6 @@ exports.callback = (req, res, next) => {
 			// post the data
 			post_req.write(post_data);
 			post_req.end();
-			console.log('4');
 		});
 	});
 };

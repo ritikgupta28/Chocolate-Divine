@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+
+const shopController = require('./controllers/shop');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
@@ -22,6 +24,8 @@ const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
 });
+
+app.use('/callback', shopController.callback);
 const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
