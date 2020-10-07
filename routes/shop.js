@@ -22,8 +22,6 @@ router.use('/ordermark/:orderId', isAuth, shopController.postOrderMark);
 
 router.get('/checkout', isAuth, shopController.getCheckout);
 
-//router.use('/callback', isAuth, shopController.callback);
-
 router.get('/orders', isAuth, shopController.getOrders);
 
 router.post(

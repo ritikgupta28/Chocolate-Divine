@@ -1,52 +1,52 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/cart.css">
-    </head>
+		<link rel="stylesheet" href="/css/cart.css">
+		</head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
-        <main>
-            <% if(products.length > 0) { %>
-                <ul class="cart__item-list">
-                    <% products.forEach(p => { %>
-                        <li class="cart__item">
-                            <h1><%= p.productId.title %></h1>
-                            <h2>Quantity: <%= p.quantity %></h2>
-                            <form action="/cart-delete-item" method="POST">
-                                <input type="hidden" value="<%= p.productId._id %>" name="productId">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <button class="btn danger" type="submit">Delete</button>
-                            </form>
-                        </li>
-                    <% }) %>
-                </ul>
-                <hr>
-                <div class="centered">
-                    <!--<form action="/create-order" method="POST">
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button type="submit" class="btn">Order Now!</button>
-                    </form>-->
-                    <a class="btn" href="/checkout">Order Now!</a>
-                </div>
+		<body>
+				<%- include('../includes/navigation.ejs') %>
+				<main>
+						<% if(products.length > 0) { %>
+								<ul class="cart__item-list">
+										<% products.forEach(p => { %>
+												<li class="cart__item">
+														<h1><%= p.productId.title %></h1>
+														<h2>Quantity: <%= p.quantity %></h2>
+														<form action="/cart-delete-item" method="POST">
+																<input type="hidden" value="<%= p.productId._id %>" name="productId">
+																<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+																<button class="btn danger" type="submit">Delete</button>
+														</form>
+												</li>
+										<% }) %>
+								</ul>
+								<hr>
+								<div class="centered">
+										<!--<form action="/create-order" method="POST">
+												<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+												<button type="submit" class="btn">Order Now!</button>
+										</form>-->
+										<a class="btn" href="/checkout">Order Now!</a>
+								</div>
 
-            <% } else { %>
-              <div class="container-fluid mt-100 " >
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
+						<% } else { %>
+							<div class="container-fluid mt-100 " >
+		<div class="row">
+				<div class="col-md-12">
+						<div class="card">
 
-                <div class="card-body cart">
-                    <div class="col-sm-12 empty-cart-cls text-center" style="text-align:center"> <img src="/images/cart.png" width="130" height="130" class="img-fluid " style="  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  ">                      <h3><strong>Your Cart is Empty !</strong></h3>
-                        <h4>Add something that make you happy 😇</h4> <a href="/products" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue Shopping</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+								<div class="card-body cart">
+										<div class="col-sm-12 empty-cart-cls text-center" style="text-align:center"> <img src="/images/cart.png" width="130" height="130" class="img-fluid " style="  display: block;
+	margin-left: auto;
+	margin-right: auto;
+	">                      <h3><strong>Your Cart is Empty !</strong></h3>
+												<h4>Add something that make you happy 😇</h4> <a href="/products" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue Shopping</a>
+										</div>
+								</div>
+						</div>
+				</div>
+		</div>
 </div>
-            <% } %>
-        </main>
-    
-        <%- include('../includes/end.ejs') %>
+						<% } %>
+				</main>
+		
+				<%- include('../includes/end.ejs') %>

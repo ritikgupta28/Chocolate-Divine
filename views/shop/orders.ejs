@@ -1,45 +1,52 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/orders.css">
-    </head>
+	<link rel="stylesheet" href="/css/orders.css">
+	</head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
-        <main>
-            <% if (orders.length <= 0) { %>
-              <div class="container-fluid mt-100">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-
-                <div class="card-body cart">
-                    <div class="col-sm-12 empty-cart-cls text-center" style="text-align:center"> <img src="/images/order.png"  width="130" height="130" class="img-fluid " style="  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  ">                      <h3><strong> No orders Yet !</strong></h3>
-                        <h4>Order something to make Chocolates happy 😇</h4> <a href="/products" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue Shopping</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-            <% } else { %>
-                <ul class="orders">
-                    <% orders.forEach(order => { %>
-                        <li class="orders__item">
-                            <h1>Order - # <%= order._id %> - <a href="/orders/<%= order._id %>" style="color:blue">Invoice</a></h1>
-                            <h1> Delivery Complete - <%= order.isDone %>
-                            <ul class="orders__products">
-                                <% order.products.forEach(p => { %>
-                                    <li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
-                                <% }); %>
-                            </ul>
-                            <% if(isAdminAuthenticated) { %>
-                            <a href="/ordermark/<%= order._id %>" class="btn">Mark Done</a>
-                            <% } %>
-                        </li>
-                    <% }); %>
-                </ul>
-            <% } %>
-        </main>
-        <%- include('../includes/end.ejs') %>
+	<body>
+		<%- include('../includes/navigation.ejs') %>
+		<main>
+			<% if (orders.length <= 0) { %>
+			  <div class="container-fluid mt-100">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body cart">
+									<div class="col-sm-12 empty-cart-cls text-center" style="text-align:center"> <img src="/images/order.png"  width="130" height="130" class="img-fluid " style="  display: block; margin-left: auto; margin-right: auto; ">
+										<h3><strong> No orders Yet !</strong></h3>
+										<h4>Order something to make Chocolates happy 😇</h4>
+										<a href="/products" class="btn btn-primary cart-btn-transform m-3" data-abc="true">Continue Shopping</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<% } else { %>
+				<ul class="orders">
+					<% orders.forEach(order => { %>
+						<li class="orders__item">
+							<h1>Order - # <%= order._id %> - <a href="/orders/<%= order._id %>" style="color:blue">Invoice</a></h1>
+							<% if(order.isDone) { %>
+								<h1>Ready for Delivery</h1>
+							<% } else { %>
+								<h1>Check here for order status</h1>
+							<% } %>
+							<% if(order.paid) { %>
+								<h1>Payment Completed!</h1>
+							<% } else { %>
+								<h1>Payment Pending...</h1>
+							<% } %>
+							<ul class="orders__products">
+								<% order.products.forEach(p => { %>
+									<li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
+								<% }); %>
+							</ul>
+							<% if(isAdminAuthenticated) { %>
+								<a href="/ordermark/<%= order._id %>" class="btn">Mark Done</a>
+							<% } %>
+						</li>
+					<% }); %>
+				</ul>
+			<% } %>
+		</main>
+		<%- include('../includes/end.ejs') %>

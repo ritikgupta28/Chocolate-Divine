@@ -5,7 +5,6 @@ const paytmServer = require('../Paytm/checksum/server')
 const { validationResult } = require('express-validator');
 
 const PDFDocument = require('pdfkit');
-const stripe = require('stripe')(process.env.STRIPE);
 
 const Product = require('../models/product');
 const Order = require('../models/order');
@@ -197,12 +196,12 @@ exports.postOrderMark = (req, res, next) => {
 }
 
 exports.postOrder = (req, res, next) => {
-	// const token = req.body.stripeToken;
 	const name = req.body.naam;
 	const location = req.body.location;
 	const number = req.body.nmbr;
 	const city = req.body.city;
 	const pincode = req.body.pincode;
+	const paid = true;
 	let totalSum = 0;
 
 	const errors = validationResult(req);
@@ -222,75 +221,117 @@ exports.postOrder = (req, res, next) => {
 				pageTitle: 'Checkout',
 				products: products,
 				totalSum: total,
-		    errorMessage: errors.array()[0].msg,
+				errorMessage: errors.array()[0].msg,
 				validationErrors: errors.array()
 			});
 		});
 	}
 
-	req.user
-		.populate('cart.items.productId')
-		.execPopulate()
-		.then(user => {
-			user.cart.items.forEach(p => {
-				totalSum += p.quantity * p.productId.price;
-			});
+	if(paid) {
+		req.user
+			.populate('cart.items.productId')
+			.execPopulate()
+			.then(user => {
+				user.cart.items.forEach(p => {
+					totalSum += p.quantity * p.productId.price;
+				});
 
-			const products = user.cart.items.map(i => {
-				return { quantity: i.quantity, product: { ...i.productId._doc } };
-			});
-			const order = new Order({
-				products: products,
-				user: {
-					email: req.user.email,
-					userId: req.user
-				},
-				address: {
-					name: name,
-					location: location,
-					number: number,
-					city: city,
-					pincode: pincode
-				}
-			});
-			return order.save();
-		})
-		.then(result => { 
-			var params = {};
-			params['MID'] = PaytmConfig.mid;
-			params['WEBSITE']	= PaytmConfig.website;
-			params['CHANNEL_ID'] = 'WEB';
-			params['INDUSTRY_TYPE_ID'] = 'Retail';
-			params['ORDER_ID'] = result._id.toString();
-			params['CUST_ID'] = req.user._id.toString();
-			params['TXN_AMOUNT'] = totalSum;
-			params['CALLBACK_URL'] = 'http://localhost:'+port+'/callback';
-			params['EMAIL']	= req.user.email;
-			params['MOBILE_NO']	= result.address.number;
+				const products = user.cart.items.map(i => {
+					return { quantity: i.quantity, product: { ...i.productId._doc } };
+				});
+				const order = new Order({
+					products: products,
+					user: {
+						email: req.user.email,
+						userId: req.user
+					},
+					paid: paid,
+					address: {
+						name: name,
+						location: location,
+						number: number,
+						city: city,
+						pincode: pincode
+					}
+				});
+				return order.save();
+			})
+			.then(result => {
+				var params = {};
+				params['MID'] = PaytmConfig.mid;
+				params['WEBSITE']	= PaytmConfig.website;
+				params['CHANNEL_ID'] = 'WEB';
+				params['INDUSTRY_TYPE_ID'] = 'Retail';
+				params['ORDER_ID'] = result._id.toString();
+				params['CUST_ID'] = req.user._id.toString();
+				params['TXN_AMOUNT'] = totalSum;
+				params['CALLBACK_URL'] = 'http://localhost:'+port+'/callback';
+				params['EMAIL']	= req.user.email;
+				params['MOBILE_NO']	= result.address.number;
 
-			checksum_lib.genchecksum(params, PaytmConfig.key, function (err, checksum) {
-				var txn_url = "https://securegw-stage.paytm.in/order/process"; // for staging
-				// var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
-				
-				var form_fields = "";
-				for(var x in params) {
-					form_fields += "<input type='hidden' name='"+x+"' value='"+params[x]+"' >";
-				}
-				form_fields += "<input type='hidden' name='CHECKSUMHASH' value='"+checksum+"' >";
+				checksum_lib.genchecksum(params, PaytmConfig.key, function (err, checksum) {
+					var txn_url = "https://securegw-stage.paytm.in/order/process"; // for staging
+					// var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
+					
+					var form_fields = "";
+					for(var x in params) {
+						form_fields += "<input type='hidden' name='"+x+"' value='"+params[x]+"' >";
+					}
+					form_fields += "<input type='hidden' name='CHECKSUMHASH' value='"+checksum+"' >";
 
-				res.writeHead(200, {'Content-Type': 'text/html'});
-				res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait!. Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
-				res.end();
+					res.writeHead(200, {'Content-Type': 'text/html'});
+					res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait!. Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
+					res.end();
+				});
+				req.user.clearCart();
+			})
+			.catch(err => {
+				const error = new Error(err);
+				error.httpStatusCode = 500;
+				return next(error);
 			});
-			req.user.clearCart();
-		})
-		.catch(err => {
-			console.log('2');
-			console.log(err);
-			const error = new Error(err);
-			error.httpStatusCode = 500;
-			return next(error);
-		});
+	}
+	else {
+		req.user
+			.populate('cart.items.productId')
+			.execPopulate()
+			.then(user => {
+				user.cart.items.forEach(p => {
+					totalSum += p.quantity * p.productId.price;
+				});
+
+				const products = user.cart.items.map(i => {
+					return { quantity: i.quantity, product: { ...i.productId._doc } };
+				});
+				const order = new Order({
+					products: products,
+					user: {
+						email: req.user.email,
+						userId: req.user
+					},
+					paid: paid,
+					address: {
+						name: name,
+						location: location,
+						number: number,
+						city: city,
+						pincode: pincode
+					}
+				});
+				return order.save();
+			})
+			.then(result => {
+				return req.user.clearCart();
+			})
+			.then (() => {
+				res.redirect('/orders');
+			})
+			.catch(err => {
+				const error = new Error(err);
+				error.httpStatusCode = 500;
+				return next(error);
+			});
+	}
 };
 
 exports.callback = (req, res, next) => {
@@ -304,20 +345,18 @@ exports.callback = (req, res, next) => {
 		var post_data = qs.parse(body);
 
 		// received params in callback
-		//console.log("\n" ,'Callback Response: ', post_data, "\n");
-		html += "<b>Callback Response</b><br>";
-		for(var x in post_data) {
-			html += x + " => " + post_data[x] + "<br/>";
-		}
+		// html += "<b>Callback Response</b><br>";
+		// for(var x in post_data) {
+		// 	html += x + " => " + post_data[x] + "<br/>";
+		// }
 		html += "<br/><br/>";
 
 		// verify the checksum
 		var checksumhash = post_data.CHECKSUMHASH;
 		// delete post_data.CHECKSUMHASH;
 		var result = checksum_lib.verifychecksum(post_data, PaytmConfig.key, checksumhash);
-		//console.log("Checksum Result => ", result, "\n");
-		html += "<b>Checksum Result</b> => " + (result? "True" : "False");
-		html += "<br/><br/>";
+		html += "<b>Result</b> => " + (result? "Payment is done" : "Ye kyu chlega ?");
+		// html += "<br/><br/>";
 
 		// Send Server-to-Server request to verify Order Status
 		var params = {"MID": PaytmConfig.mid, "ORDERID": post_data.ORDERID};
@@ -342,12 +381,11 @@ exports.callback = (req, res, next) => {
 					response += chunk;
 				});
 				post_res.on('end', function() {
-					//console.log('S2S Response: ', response, "\n");
 					var _result = JSON.parse(response);
-					html += "<b>Status Check Response</b><br>";
-					for(var x in _result) {
-						html += x + " => " + _result[x] + "<br/>";
-					}
+					// html += "<b>Status Check Response</b><br>";
+					// for(var x in _result) {
+						// html += x + " => " + _result[x] + "<br/>";
+					// }
 					res.writeHead(200, {'Content-Type': 'text/html'});
 					res.write(html);
 					res.end();
