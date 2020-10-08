@@ -21,8 +21,8 @@ const orderSchema = new Schema({
     }
   },
   isDone: {
-    type: Boolean,
-    default: false
+    type: Number,
+    default: -1
   },
   paymentType: {
     type: String,

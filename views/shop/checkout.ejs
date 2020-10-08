@@ -52,7 +52,7 @@
 						</div>
 
 							<div class='credit-info'>
-									<form action="/create-order" method="POST" enctype="multipart/form-data">
+									<form action="/checkout" method="POST" enctype="multipart/form-data">
 								<div class='credit-info-content'>
 									Name :
 									<input
@@ -120,7 +120,7 @@
 									<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 									<input type="hidden" id="paymentMode" name="paymentMode" value="delivery">
 									<button class="btn" type="submit">Pay on Delivery</button>
-									<button class="btn paytmbtn" type="submit" >Pay with Paytm</button>
+									<button class="btn paytmbtn" type="submit">Pay with Paytm</button>
 								</div>
 								</form>
 							</div>

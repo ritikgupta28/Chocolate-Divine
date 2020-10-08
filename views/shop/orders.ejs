@@ -25,11 +25,29 @@
 				<ul class="orders">
 					<% orders.forEach(order => { %>
 						<li class="orders__item">
-							<h1>Order - # <%= order._id %> - <a href="/orders/<%= order._id %>" style="color:blue">Invoice</a></h1>
-							<% if(order.isDone) { %>
-								<h1>Ready for Delivery</h1>
+							<h1>Order Id : <%= order._id %> - <a href="/orders/<%= order._id %>" style="color:blue">Invoice</a></h1>
+							<% if(order.isDone === 1) { %>
+								<h1>Delivered</h1>
+							<% } else if(order.isDone === 0) { %>
+								<h1>
+									Ready for Delivery
+									<% if(isAdminAuthenticated) { %>
+										<form action="/deliverymark/<%= order._id %>" method="POST">
+											<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+											<button class="btn" type="submit">Mark as Delivered</button>
+										</form>
+									<% } %>
+								</h1>
 							<% } else { %>
-								<h1>Check here for order status</h1>
+								<h1>
+									Check here for order status
+									<% if(isAdminAuthenticated) { %>
+										<form action="/readymark/<%= order._id %>" method="POST">
+											<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+											<button class="btn" type="submit">Mark as Ready</button>
+										</form>
+									<% } %>
+								</h1>
 							<% } %>
 							<% if(order.paymentDone) { %>
 								<h1>Payment Completed!</h1>
@@ -41,9 +59,6 @@
 									<li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
 								<% }); %>
 							</ul>
-							<% if(isAdminAuthenticated) { %>
-								<a href="/ordermark/<%= order._id %>" class="btn">Mark Done</a>
-							<% } %>
 						</li>
 					<% }); %>
 				</ul>

@@ -76,49 +76,36 @@
 			</div>
 			<div style="right:50px">
 				<% if(!isAuthenticated) { %>
-					<a href="/login" class="<%= path === '/login' ? 'active' : '' %>" ><button type="button" class="btn btn-success" >Login</button></a>
-			<%  }
-				else{  %>
-
-							<form action="/logout" method="post">
-									<input type="hidden" name="_csrf" value="<%= csrfToken %>">
-									<button type="submit" class="btn btn-success">Logout</button>
-							</form>
-
-			<%  } %>
-
-
-		<!-- </li> -->
-
-
+					<a href="/login" class="<%= path === '/login' ? 'active' : '' %>" >
+							<button type="button" class="btn btn-success" >Login</button>
+					</a>
+			<% } else { %>
+				<form action="/logout" method="post">
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+					<button type="submit" class="btn btn-success">Logout</button>
+				</form>
+			<% } %>
 		</div>
-
-
-
-
 	</nav>
 
 	<!-- navbar ends -->
+
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" >&times;</a>
-		<a class="nav-link" href="/" onclick="closeNav">HOME <span class="sr-only">(current)</span></a>
-		<a class="<%= path === '/products' ? 'active' : '' %> nav-link" href="/products" onclick="closeNav()">PRODUCTS</a>
+		<a class="nav-link" href="/" onclick="closeNav">Home<span class="sr-only">(current)</span></a>
+		<a class="<%= path === '/products' ? 'active' : '' %> nav-link" href="/products" onclick="closeNav()">Products</a>
 		<% if(!isAuthenticated){ %>
-		<a class="<%= path === '/login' ? 'active' : '' %> nav-link" href="/login" onclick="closeNav()">LOGIN</a>
-		<a class="<%= path === '/signup' ? 'active' : '' %> nav-link" href="/signup" onclick="closeNav()">SIGNUP</a>
-	<%}
-		else{ %>
-		<a class="<%= path === '/cart' ? 'active' : '' %> nav-link" href="/cart" onclick="closeNav()">CART</a>
-		<a class="<%= path === '/orders' ? 'active' : '' %> nav-link" href="/orders" onclick="closeNav()">MY ORDERS</a>
-	<%} %>
-	<% if(isAdminAuthenticated) { %>
-
-			<a class="nav-link" class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">ADD PRODUCT</a>
-			<a class="nav-link" class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">ADMIN PRODUCTS</a>
-
-	<% } %>
-		<a href="/#contactus" onclick="closeNav()" class="nav-link">CONTACT US</a>
-
+			<a class="<%= path === '/login' ? 'active' : '' %> nav-link" href="/login" onclick="closeNav()">Login</a>
+			<a class="<%= path === '/signup' ? 'active' : '' %> nav-link" href="/signup" onclick="closeNav()">SignUp</a>
+		<% } else { %>
+			<a class="<%= path === '/cart' ? 'active' : '' %> nav-link" href="/cart" onclick="closeNav()">Cart</a>
+			<a class="<%= path === '/orders' ? 'active' : '' %> nav-link" href="/orders" onclick="closeNav()">Orders</a>
+		<% } %>
+		<% if(isAdminAuthenticated) { %>
+			<a class="nav-link" class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product</a>
+			<a class="nav-link" class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">My Products</a>
+		<% } %>
+		<a href="/#contactus" onclick="closeNav()" class="nav-link">Contact Us</a>
 	</div>
 	<!-- side bar ends -->
 

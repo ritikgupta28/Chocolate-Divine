@@ -18,14 +18,10 @@ router.post('/cart', isAuth, shopController.postCart);
 
 router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
-router.use('/ordermark/:orderId', isAuth, shopController.postOrderMark);
-
 router.get('/checkout', isAuth, shopController.getCheckout);
 
-router.get('/orders', isAuth, shopController.getOrders);
-
 router.post(
-  '/create-order',
+  '/checkout',
   [
     body('naam')
       .isString()
@@ -48,8 +44,14 @@ router.post(
       .trim()
   ],
   isAuth,
-  shopController.postOrder
+  shopController.postCheckout
 );
+
+router.get('/orders', isAuth, shopController.getOrders);
+
+router.post('/readymark/:orderId', isAuth, shopController.postReadyMark);
+
+router.post('/deliverymark/:orderId', isAuth, shopController.postDeliveryMark);
 
 router.get('/orders/:orderId', isAuth, shopController.getInvoice);
 

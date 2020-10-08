@@ -53,23 +53,18 @@
 <!-- navbar ends -->
 <div id="mySidenav" class="sidenav">
 	<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-	<a class="nav-link" href="/" onclick="closeNav()">HOME <span class="sr-only">(current)</span></a>
-	<a class="<%= path === '/products' ? 'active' : '' %>" href="/products" onclick="closeNav()">PRODUCTS</a>
-	<% if(!isAuthenticated){ %>
-	<a class="<%= path === '/login' ? 'active' : '' %>" href="/login" onclick="closeNav()">LOGIN</a>
-	<a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup" onclick="closeNav()">SIGNUP</a>
-<% } else { %>
-	<a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders" onclick="closeNav()">ORDERS</a>
-	<a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart" onclick="closeNav()">CART</a>
-<%} %>
-<% if(isAdminAuthenticated) { %>
-
-
-
-		<a class="nav-link" class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">ADD PRODUCT</a>
-		<a class="nav-link" class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">ADMIN PRODUCTS</a>
-
-<% } %>
-	<a href="/#contactus" onclick="closeNav()">CONTACT US</a>
-
+	<a class="nav-link" href="/" onclick="closeNav()">Home<span class="sr-only">(current)</span></a>
+	<a class="<%= path === '/products' ? 'active' : '' %>" href="/products" onclick="closeNav()">Products</a>
+	<% if(!isAuthenticated) { %>
+		<a class="<%= path === '/login' ? 'active' : '' %>" href="/login" onclick="closeNav()">Login</a>
+		<a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup" onclick="closeNav()">SignUp</a>
+	<% } else { %>
+		<a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart" onclick="closeNav()">Cart</a>
+		<a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders" onclick="closeNav()">Orders</a>
+	<% } %>
+	<% if(isAdminAuthenticated) { %>
+		<a class="nav-link" class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product</a>
+		<a class="nav-link" class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">My Products</a>
+	<% } %>
+	<a href="/#contactus" onclick="closeNav()">Contact Us</a>
 </div>

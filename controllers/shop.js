@@ -146,53 +146,7 @@ exports.getCheckout = (req, res, next) => {
 		});
 };
 
-exports.postOrderMark = (req, res, next) => {
-	const orderId = req.params.orderId;
-	Order.findById(orderId)
-	.then(order => {
-		order.isDone = true;
-		return order.save();
-	})
-	.catch(err => {
-		  const error = new Error(err);
-			error.httpStatusCode = 500;
-			return next(error);
-	});
-	setTimeout(() => {
-		if(req.user.email === process.env.ADMIN_EMAIL) {
-		Order.find().sort({'isDone': 1})
-		.then(orders => {
-			res.render('shop/orders', {
-					path: '/orders',
-					pageTitle: 'Your Orders',
-					orders: orders
-				});
-		})
-		.catch(err => {
-				const error = new Error(err);
-				error.httpStatusCode = 500;
-				return next(error);
-			});
-		}
-		else {
-		Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
-			.then(orders => {
-				res.render('shop/orders', {
-					path: '/orders',
-					pageTitle: 'Your Orders',
-					orders: orders
-				});
-			})
-			.catch(err => {
-				const error = new Error(err);
-				error.httpStatusCode = 500;
-				return next(error);
-			});
-		}
-	}, 1000);
-}
-
-exports.postOrder = (req, res, next) => {
+exports.postCheckout = (req, res, next) => {
 	const name = req.body.naam;
 	const location = req.body.location;
 	const number = req.body.nmbr;
@@ -224,40 +178,40 @@ exports.postOrder = (req, res, next) => {
 		});
 	}
 
-		req.user
-			.populate('cart.items.productId')
-			.execPopulate()
-			.then(user => {
-				user.cart.items.forEach(p => {
-					totalSum += p.quantity * p.productId.price;
-				});
+	req.user
+		.populate('cart.items.productId')
+		.execPopulate()
+		.then(user => {
+			user.cart.items.forEach(p => {
+				totalSum += p.quantity * p.productId.price;
+			});
 
-				const products = user.cart.items.map(i => {
-					return { quantity: i.quantity, product: { ...i.productId._doc } };
-				});
-				const order = new Order({
-					products: products,
-					user: {
-						email: req.user.email,
-						userId: req.user
-					},
-					paymentType: paymentType,
-					address: {
-						name: name,
-						location: location,
-						number: number,
-						city: city,
-						pincode: pincode
-					}
-				});
-				return order.save();
-			})
-			.then(result => {
-				if(paymentType === "delivery") {
-					req.user.clearCart();
-					res.redirect('/orders');
+			const products = user.cart.items.map(i => {
+				return { quantity: i.quantity, product: { ...i.productId._doc } };
+			});
+			const order = new Order({
+				products: products,
+				user: {
+					email: req.user.email,
+					userId: req.user
+				},
+				paymentType: paymentType,
+				address: {
+					name: name,
+					location: location,
+					number: number,
+					city: city,
+					pincode: pincode
 				}
-				else {
+			});
+			return order.save();
+		})
+		.then(result => {
+			if(paymentType === "delivery") {
+				req.user.clearCart();
+				res.redirect('/orders');
+			}
+			else {
 				var params = {};
 				params['MID'] = PaytmConfig.mid;
 				params['WEBSITE']	= PaytmConfig.website;
@@ -284,14 +238,14 @@ exports.postOrder = (req, res, next) => {
 					res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait! Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
 					res.end();
 				});
+				req.user.clearCart();
 			}
-			  req.user.clearCart();
-			})
-			.catch(err => {
-				const error = new Error(err);
-				error.httpStatusCode = 500;
-				return next(error);
-			});
+		})
+		.catch(err => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
 };
 
 exports.callback = (req, res, next) => {
@@ -318,13 +272,15 @@ exports.callback = (req, res, next) => {
 		html += "<br/><br/>";
 		// html += "<br/><br/>";
 		const pay = post_data["STATUS"];
+		var paymentComplete = false;
 		Order.findById(post_data.ORDERID)
 			.then(order => {
 				if(order) {
 					if(pay === "TXN_SUCCESS") {
 						order.paymentDone = true;
+						paymentComplete = true;
+						order.save();
 					}
-					return order.save();
 				}
 			})
 			.catch(err => {
@@ -332,6 +288,16 @@ exports.callback = (req, res, next) => {
 			  error.httpStatusCode = 500;
 			  return next(error);
 			})
+
+		if(!paymentComplete) {
+			Order.deleteOne({ _id: post_data.ORDERID }, function (err) {
+				if(err) {
+					const error = new Error(err);
+				  error.httpStatusCode = 500;
+				  return next(error);
+				}
+			});
+		} 
 		// Send Server-to-Server request to verify Order Status
 		var params = {"MID": PaytmConfig.mid, "ORDERID": post_data.ORDERID};
 		checksum_lib.genchecksum(params, PaytmConfig.key, function (err, checksum) {
@@ -373,36 +339,132 @@ exports.callback = (req, res, next) => {
 	});
 };
 
-exports.getOrders = (req, res, next) => {
-	if(req.user.email === process.env.ADMIN_EMAIL ) {
-	Order.find().sort({'isDone': 1})
-	.then(orders => {
-		res.render('shop/orders', {
-				path: '/orders',
-				pageTitle: 'Your Orders',
-				orders: orders
-			});
-	})
-	.catch(err => {
-			const error = new Error(err);
-			error.httpStatusCode = 500;
-			return next(error);
-		});
-	}
-	else {
-	Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
-		.then(orders => {
-			res.render('shop/orders', {
-				path: '/orders',
-				pageTitle: 'Your Orders',
-				orders: orders
-			});
+exports.postReadyMark = (req, res, next) => {
+	const orderId = req.params.orderId;
+	Order.findById(orderId)
+		.then(order => {
+			if(order.isDone === -1) {
+				order.isDone = 0;
+			}
+			return order.save();
 		})
 		.catch(err => {
-			const error = new Error(err);
+		  const error = new Error(err);
 			error.httpStatusCode = 500;
 			return next(error);
 		});
+		setTimeout(() => {
+			if(req.user.email === process.env.ADMIN_EMAIL) {
+				Order.find().sort({'isDone': 1})
+					.then(orders => {
+						res.render('shop/orders', {
+							path: '/orders',
+							pageTitle: 'Your Orders',
+							orders: orders
+						});
+					})
+					.catch(err => {
+						const error = new Error(err);
+						error.httpStatusCode = 500;
+						return next(error);
+					});
+			}
+			else {
+				Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
+					.then(orders => {
+						res.render('shop/orders', {
+							path: '/orders',
+							pageTitle: 'Your Orders',
+							orders: orders
+						});
+					})
+					.catch(err => {
+						const error = new Error(err);
+						error.httpStatusCode = 500;
+						return next(error);
+					});
+			}
+		}, 1000);
+}
+
+exports.postDeliveryMark = (req, res, next) => {
+	const orderId = req.params.orderId;
+	Order.findById(orderId)
+		.then(order => {
+			if(order.isDone === 0) {
+				order.isDone = 1;
+			}
+			return order.save();
+		})
+		.catch(err => {
+		  const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
+		setTimeout(() => {
+			if(req.user.email === process.env.ADMIN_EMAIL) {
+				Order.find().sort({'isDone': 1})
+					.then(orders => {
+						res.render('shop/orders', {
+							path: '/orders',
+							pageTitle: 'Your Orders',
+							orders: orders
+						});
+					})
+					.catch(err => {
+						const error = new Error(err);
+						error.httpStatusCode = 500;
+						return next(error);
+					});
+			}
+			else {
+				Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
+					.then(orders => {
+						res.render('shop/orders', {
+							path: '/orders',
+							pageTitle: 'Your Orders',
+							orders: orders
+						});
+					})
+					.catch(err => {
+						const error = new Error(err);
+						error.httpStatusCode = 500;
+						return next(error);
+					});
+			}
+		}, 1000);
+}
+
+exports.getOrders = (req, res, next) => {
+	if(req.user.email === process.env.ADMIN_EMAIL ) {
+		Order.find().sort({'isDone': 1})
+			.then(orders => {
+				res.render('shop/orders', {
+					path: '/orders',
+					pageTitle: 'Your Orders',
+					orders: orders
+				});
+			})
+			.catch(err => {
+				const error = new Error(err);
+				error.httpStatusCode = 500;
+				return next(error);
+			});
+	}
+	else {
+		Order.find({ 'user.userId': req.user._id }).sort({'isDone': 1})
+			.then(orders => {
+				res.render('shop/orders', {
+					path: '/orders',
+					pageTitle: 'Your Orders',
+					orders: orders
+				});
+			})
+			.catch(err => {
+				const error = new Error(err);
+				error.httpStatusCode = 500;
+				return next(error);
+			});
 	}
 };
 
