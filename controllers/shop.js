@@ -254,8 +254,11 @@ exports.postOrder = (req, res, next) => {
 				return order.save();
 			})
 			.then(result => {
-				console.log('123')
-				if(paymentType === "paytm") {
+				if(paymentType === "delivery") {
+					req.user.clearCart();
+					res.redirect('shop/orders');
+				}
+				else {
 				var params = {};
 				params['MID'] = PaytmConfig.mid;
 				params['WEBSITE']	= PaytmConfig.website;
@@ -282,8 +285,8 @@ exports.postOrder = (req, res, next) => {
 					res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait! Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
 					res.end();
 				});
+				return req.user.clearCart();
 			}
-				req.user.clearCart();
 			})
 			.catch(err => {
 				const error = new Error(err);
@@ -315,10 +318,11 @@ exports.callback = (req, res, next) => {
 	}
 		html += "<br/><br/>";
 		// html += "<br/><br/>";
+		const pay = post_data["STATUS"];
 		Order.findById(post_data.ORDERID)
 			.then(order => {
 				if(order) {
-					if(post_data["STATUS"] === "TXN_SUCCESS") {
+					if(pay === "TXN_SUCCESS") {
 						order.paymentDone = true;
 					}
 					return order.save();
