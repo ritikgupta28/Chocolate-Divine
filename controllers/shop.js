@@ -91,6 +91,9 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
 	const prodId = req.body.productId;
 	const quantity = req.body.quantity;
+	if(quantity<1) {
+		res.redirect('/products');
+	}
 
 	Product.findById(prodId)
 		.then(product => {
