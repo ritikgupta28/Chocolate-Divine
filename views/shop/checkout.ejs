@@ -120,7 +120,7 @@
 									<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 									<input type="hidden" id="paymentMode" name="paymentMode" value="delivery">
 									<button class="btn" type="submit">Pay on Delivery</button>
-									<button class="btn" type="submit" onclick="paymentMode()">Pay with Paytm</button>
+									<button class="btn paytmbtn" type="submit" >Pay with Paytm</button>
 								</div>
 								</form>
 							</div>
@@ -128,5 +128,5 @@
 					</div>
 				</div>
 			</main>
-			<%- include('../includes/end.ejs') %>
 			<script src="/js/checkout.js"></script>
+			<%- include('../includes/end.ejs') %>

@@ -91,7 +91,7 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
 	const prodId = req.body.productId;
 	const quantity = req.body.quantity;
-	
+
 	Product.findById(prodId)
 		.then(product => {
 			return req.user.addToCart(product, quantity);
@@ -271,7 +271,7 @@ exports.postOrder = (req, res, next) => {
 				checksum_lib.genchecksum(params, PaytmConfig.key, function (err, checksum) {
 					var txn_url = "https://securegw-stage.paytm.in/order/process"; // for staging
 					// var txn_url = "https://securegw.paytm.in/theia/processTransaction"; // for production
-					
+
 					var form_fields = "";
 					for(var x in params) {
 						form_fields += "<input type='hidden' name='"+x+"' value='"+params[x]+"' >";
@@ -443,7 +443,7 @@ exports.getInvoice = (req, res, next) => {
 							': ' +
 							prod.quantity +
 							' x ' +
-							prod.product.price + 
+							prod.product.price +
 							' Rs. '
 					);
 			});
