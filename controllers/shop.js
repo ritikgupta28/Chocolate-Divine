@@ -200,7 +200,6 @@ exports.postOrder = (req, res, next) => {
 	const pincode = req.body.pincode;
 	const paymentType = req.body.paymentMode;
 	let totalSum = 0;
-	console.log(paymentType)
 
 	const errors = validationResult(req);
 
@@ -256,7 +255,7 @@ exports.postOrder = (req, res, next) => {
 			.then(result => {
 				if(paymentType === "delivery") {
 					req.user.clearCart();
-					res.redirect('shop/orders');
+					res.redirect('/orders');
 				}
 				else {
 				var params = {};
@@ -285,8 +284,8 @@ exports.postOrder = (req, res, next) => {
 					res.write('<html><head><title>Checkout Page</title></head><body><center><h1>Please wait! Do not refresh this page...</h1></center><form method="post" action="'+txn_url+'" name="f1">'+form_fields+'</form><script src="/js/paytm.js"></script></body></html>');
 					res.end();
 				});
-				return req.user.clearCart();
 			}
+			  req.user.clearCart();
 			})
 			.catch(err => {
 				const error = new Error(err);
