@@ -96,16 +96,6 @@ Forces image to be 100% width and not max width of 100%
 .carousel-item .img-fluid {
   width:100%;
 }
-input {
-    border: 1px solid #000
-
-
-}
-textarea {
-    border: 1px solid #000
-
-
-}
 
 /*
 anchors are inline so you need ot make them block to go full width
