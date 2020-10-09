@@ -2,9 +2,10 @@ var modal = document.querySelectorAll('.openmodal');
 for (let i = 0; i < modal.length; i++) {
     modal[i].addEventListener("click", function() {
       var myBookId = $(this).data('id');
-      console.log(myBookId);
-      console.log(myBookId.address.pincode);
-      $(".modal-body #orderid").innerHTML =  myBookId ;
+
+       console.log(myBookId);
+  
+      document.querySelector('#orderid').innerHTML =  myBookId ;
 
     });
 }

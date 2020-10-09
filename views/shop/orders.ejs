@@ -22,15 +22,18 @@
 					</div>
 				</div>
 			<% } else { %>
-				<ul class="orders">
+				<ul class="orders center" style="text-align:center">
 					<% orders.forEach(order => { %>
+						<div class="orders__item">
+
+
 						<ul class="orders__products">
 							<% order.products.forEach(p => { %>
 								<li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
 							<% }); %>
 						</ul>
-						<button type="button" class="btn openmodal" data-toggle="modal" data-target="#modal1" data-id="<%= order %>" > Details </button>
-
+						<button type="button" class="btn openmodal" data-toggle="modal" data-target="#modal1" data-id=" <%= order._id %>" > Details </button>
+	</div>
 
 						<!-- modal -->
 						<div class="modal fade" id="modal1">
@@ -39,7 +42,9 @@
 												<!-- Modal Header -->
 												<div class="modal-header">
 														<h4 class="modal-title">ORDER DETAILS<br> Thanks for shopping with chocolatedivine !</h4> <button type="button" class="close" data-dismiss="modal">&times;</button>
+
 												</div> <!-- Modal body -->
+
 												<div class="modal-body">
 														<div class="container">
 																<!-- <h6>Item Details</h6>
@@ -56,38 +61,36 @@
 																<div class="row">
 																		<div class="col-xs-6">
 																				<ul type="none">
-																						<li class="left" id="orderid">Order ID:</li>
-																						<li class="left">Date:</li>
-																						<li class="left">Price:</li>
+																						<li class="left" >Order ID:</li>
+
 																						<li class="left">Payment:</li>
-																						<li class="left">Total Price:</li>
+
 																				</ul>
 																		</div>
 																		<div class="col-xs-6">
 																				<ul class="right" type="none">
-																						<li class="right" ><%= order._id %></li>
-																						<li class="right">19-03-2020</li>
-																						<li class="right">$690</li>
+																						<li class="right" id="orderid"></li>
+
 																						<% if(order.paymentDone) { %>
 																							<li class="right">Done!</li>
 																						<% } else { %>
 																							<li class="right">Pending</li>
 																						<% } %>
-																						<li class="right">$720</li>
+
 
 
 																				</ul>
 																		</div>
 																</div>
 																<h6>Status</h6>
-																<div class="row" style="border-bottom: none">
+																<div class="row center" style="border-bottom: none r">
 																		<div class="col-xs-6">
 																				<ul type="none">
 																					<% if(order.isDone === 1) { %>
 																						<li class="left">Delivered</li>
 																					<% } else if(order.isDone === 0) { %>
 
-																							<li class="left">Ready for delivery </li>
+																							<li >Ready for delivery </li>
 																							<% if(isAdminAuthenticated) { %>
 																								<form action="/deliverymark/<%= order._id %>" method="POST" class="right">
 																									<input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -132,6 +135,7 @@
 
 
 					<% }); %>
+
 				</ul>
 			<% } %>
 		</main>
