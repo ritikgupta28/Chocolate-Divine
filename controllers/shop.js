@@ -12,7 +12,7 @@ const ITEMS_PER_PAGE = 4;
 
 const https = require('https');
 const qs = require('querystring');
-const checksum_lib = require('../paytm/checksum/checksum');
+const checksum_lib = require('../paytm/checksum');
 
 var PaytmConfig = {
 	mid: process.env.MID,
