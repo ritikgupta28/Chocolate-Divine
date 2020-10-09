@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const paytmServer = require('../Paytm/checksum/server')
 const { validationResult } = require('express-validator');
 
 const PDFDocument = require('pdfkit');
