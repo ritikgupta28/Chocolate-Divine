@@ -4,6 +4,9 @@
 		"MONGO_PASSWORD": "gMXSIeeXHIZ2000K",
 		"MONGO_DEFAULT_DATABASE": "chocodivine",
 		"ADMIN_EMAIL": "chocolatedivinekkr@gmail.com",
-		"STRIPE": "pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO"
+		"STRIPE": "pk_test_h2tgqWZsF19xCvnJ7hQSveem00G5DfgOtO",
+		"MID": "NCAfMA53556886213203",
+		"KEY": "KzkRB6v8cGFQMwJO",
+		"WEBSITE": "WEBSTAGING"
 	}
 }

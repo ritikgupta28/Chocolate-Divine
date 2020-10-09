@@ -16,9 +16,9 @@ const qs = require('querystring');
 const checksum_lib = require('../paytm/checksum/checksum');
 
 var PaytmConfig = {
-	mid: "NCAfMA53556886213203",
-	key: "KzkRB6v8cGFQMwJO",
-	website: "WEBSTAGING"
+	mid: process.env.MID,
+	key: process.env.KEY,
+	website: process.env.WEBSITE
 }
 
 exports.getProducts = (req, res, next) => {
@@ -223,7 +223,7 @@ exports.postCheckout = (req, res, next) => {
 				params['ORDER_ID'] = result._id.toString();
 				params['CUST_ID'] = req.user._id.toString();
 				params['TXN_AMOUNT'] = totalSum;
-				params['CALLBACK_URL'] = 'http://localhost:3000/callback';
+				params['CALLBACK_URL'] = 'https://chocolatedivine.herokuapp.com' + '/callback';
 				params['EMAIL']	= req.user.email;
 				params['MOBILE_NO']	= result.address.number;
 
@@ -258,7 +258,7 @@ exports.callback = (req, res, next) => {
 	});
 	req.on('end', function () {
 		var html = "";
-		html += "<a href='http://localhost:3000/orders'>Go to Orders</a>";
+		html += "<a href='https://chocolatedivine.herokuapp.com/orders'>Go to Orders</a>";
 		html += "<br/><br/>";
 		var post_data = qs.parse(body);
 		// verify the checksum
