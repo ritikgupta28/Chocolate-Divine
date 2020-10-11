@@ -1,7 +1,7 @@
 .orders {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0px 50px;
 }
 
 .orders__item h1 {
@@ -47,18 +47,8 @@ body {
     font-family: Roboto
 }
 
-.mt-100 {
-    margin-top: 150px
-}
-
 .modal-content {
     border-radius: 0.7rem
-}
-
-@media(width:1024px) {
-    .modal-dialog {
-        max-width: 700px
-    }
 }
 
 .modal-title {
@@ -129,13 +119,6 @@ ul li {
 .col {
     padding-left: 0
 }
-
-@media(min-width:1025px) {
-    img {
-        width: 70%
-    }
-}
-
 
 .openmodal {
     background-color: white;

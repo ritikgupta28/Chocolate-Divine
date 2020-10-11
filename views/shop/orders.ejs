@@ -31,8 +31,10 @@
 							<% order.products.forEach(p => { %>
 								<li class="orders__products-item"><%= p.product.title %> (<%= p.quantity %>)</li>
 
-							<% }); %>
+							<% }); %> 
 						</ul>
+						<p>Order Date:</p> 
+						<p><%= order.createdAt %> </p>
 						<div class="row">
 								<div class="col-xs-6">
 										<ul type="none">
@@ -41,7 +43,6 @@
 												<li class="left" >Contact:</li>
 												<li class="left" >Total Amount:</li>
 												<li class="left">Payment:</li>
-
 										</ul>
 								</div>
 								<div class="col-xs-6">
@@ -56,7 +57,7 @@
 
 
                         <li class="right"><%= order._id %> </li>
-												<li class="right"><%= order.address.name %> </li>
+                       	<li class="right"><%= order.address.name %> </li>
 
 												<li class="right"><%= order.address.number %> </li>
 												  <li class="right"><%= ordersum %> </li>
@@ -66,7 +67,6 @@
 												<% } else { %>
 													<li class="right">Pending</li>
 												<% } %>
-
 
 
 										</ul>
@@ -89,7 +89,7 @@
 													<% } %>
 													<% } else { %>
 														<h1>
-															<li class="left">Order Placed </li>
+															<li>Order Placed </li>
 															<% if(isAdminAuthenticated) { %>
 																<form action="/readymark/<%= order._id %>" method="POST">
 																	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
