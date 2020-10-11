@@ -13,6 +13,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   padding: 1rem;
   margin-bottom: 1rem;
+  border-radius: 20px;
 }
 
 .orders__products {
@@ -26,6 +27,7 @@
     padding: 0.5rem;
     border: 1px solid #00695c;
     color: #00695c;
+    border-radius: 15px;
 }
 body {
   padding-top: 5rem;
@@ -41,7 +43,7 @@ body {
 }
 
 body {
-  
+
     font-family: Roboto
 }
 
